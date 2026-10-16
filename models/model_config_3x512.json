@@ -1,0 +1,13 @@
+{
+  "checkpoint": "best_model_3x512.pt",
+  "layers": 3,
+  "hidden_size": 512,
+  "embedding_size": 256,
+  "dropout": 0.25,
+  "sequence_length": 128,
+  "batch_size": 32,
+  "learning_rate": 0.0005,
+  "seed": 42,
+  "target_conditioning": "future_window_final_pitch",
+  "dataset": "same AAM MIDI preprocessing and file-level 80/10/10 split"
+}
