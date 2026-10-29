@@ -84,7 +84,7 @@ def parse_midi_bytes(data: bytes) -> list[Event]:
     if header_size < 6 or 8 + header_size > len(data):
         raise ValueError("invalid MIDI header length")
     fmt, track_count, division = struct.unpack_from(">HHH", data, 8)
-    if fmt not in (0, 1, 2) or track_count < 1 or division == 0 or division & 0x8000:
+    if fmt not in (0, 1) or track_count < 1 or division == 0 or division & 0x8000:
         raise ValueError("unsupported MIDI format or time division")
     pos = 8 + header_size
     tracks: list[list[tuple[int, int, str, int, int]]] = []
@@ -158,7 +158,7 @@ def parse_midi_bytes(data: bytes) -> list[Event]:
     merged = sorted((tick, track_i, order, kind, value, velocity)
                     for track_i, track in enumerate(tracks)
                     for tick, order, kind, value, velocity in track)
-    active: dict[tuple[int, int], list[tuple[float, int]]] = {}
+    active: dict[tuple[int, int, int], list[tuple[float, int]]] = {}
     notes: list[tuple[float, float, int, int]] = []
     seconds, prev_tick, tempo = 0.0, 0, 500_000
     for tick, _track_i, _order, kind, value, velocity in merged:
@@ -168,16 +168,21 @@ def parse_midi_bytes(data: bytes) -> list[Event]:
             tempo = value
         elif kind == "on":
             channel, pitch = divmod(value, 128)
-            active.setdefault((channel, pitch), []).append((seconds, velocity))
+            active.setdefault((_track_i, channel, pitch), []).append((seconds, velocity))
         elif kind == "off":
             channel, pitch = divmod(value, 128)
-            key = (channel, pitch)
+            key = (_track_i, channel, pitch)
             if active.get(key):
                 start, vel = active[key].pop(0)
                 notes.append((start, max(QUANTUM, seconds - start), pitch, vel))
+        elif kind == "end":
+            for key in list(active):
+                if key[0] == _track_i:
+                    for start, vel in active.pop(key):
+                        notes.append((start, max(QUANTUM, seconds - start), key[2], vel))
     # Some multitrack exports omit note-offs at end-of-track. Close these notes at
     # the validated track end instead of discarding an otherwise useful MIDI file.
-    for (_channel, pitch), starts in active.items():
+    for (_track_i, _channel, pitch), starts in active.items():
         for start, vel in starts:
             notes.append((start, max(QUANTUM, seconds - start), pitch, vel))
     notes.sort(key=lambda row: (row[0], row[2]))
@@ -220,6 +225,8 @@ def _midi_sources(source: Path):
 
 def preprocess_directory(source: Path, destination: Path) -> int:
     """Recursively validate MIDI files and write normalized JSONL training records."""
+    if destination.exists() and any(destination.glob('*.jsonl')):
+        raise ValueError("Choose an empty output directory; existing processed data is preserved.")
     destination.mkdir(parents=True, exist_ok=True)
     count = invalid = too_short = discovered = total_events = 0
     approx_bytes = 0
@@ -243,6 +250,7 @@ def preprocess_directory(source: Path, destination: Path) -> int:
         total_events += len(events)
         approx_bytes += out.stat().st_size
     report = {"source": str(source), "discovered_midi_files": discovered,
+              "preprocessing_version": "track-local-noteoffs-v2",
               "converted_files": count, "invalid_files": invalid,
               "files_with_fewer_than_3_notes": too_short,
               "audio_files_read": 0, "total_events": total_events,

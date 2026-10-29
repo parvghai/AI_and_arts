@@ -1,0 +1,34 @@
+{
+  "models\\best_model.pt": {
+    "sha256": "999cf1b46f59c4cb6a17c1ec9844e8c023a46fe1ef134c9cc784b34ea1b28895",
+    "unchanged": true
+  },
+  "models\\best_model_3x512.pt": {
+    "sha256": "93a812286461d21f998d6bad3b8897ea04a23bfb0eb3a72d217089e83ae8dde2",
+    "unchanged": true
+  },
+  "models\\best_model_4x768.pt": {
+    "sha256": "109ad239a4eab44c3f6c07bc466b59e522973cd66af9fd56ca17e2b0f36d3393",
+    "unchanged": true
+  },
+  "models\\latest_model.pt": {
+    "sha256": "619150d5d94cd3f090f3e3bbcccead2d938fad167396a5052f4f08feb1ffdbe1",
+    "unchanged": true
+  },
+  "models\\latest_model_4x768.pt": {
+    "sha256": "111734ee51f2e2c8155a864df2e3e8d491cf334b3124d2c3b11eb22414033351",
+    "unchanged": true
+  },
+  "experiments\\aam_annotated\\models\\aam_annotated_best.pt": {
+    "sha256": "84463c61bfe37f36cbc0c11ae8c6adb6513e7c3e966394b2ab84b225dcb1bb33",
+    "unchanged": true
+  },
+  "experiments\\aam_annotated\\models\\aam_annotated_latest.pt": {
+    "sha256": "90b5cf930f1a54f55abf5c3394a3c3c87e382c6f8448c8b2e81c1b2273d90da5",
+    "unchanged": true
+  },
+  "experiments\\aam_annotated\\smoke\\models\\aam_annotated_smoke.pt": {
+    "sha256": "16968d5a325d595566f2431fdceb7dd0144eb536443482f60bd113be8840aeab",
+    "unchanged": true
+  }
+}

@@ -1,0 +1,4 @@
+# Optional local reference analysis. Tested installed versions are documented in README.
+numpy>=1.26
+scipy>=1.11
+soundfile>=0.13

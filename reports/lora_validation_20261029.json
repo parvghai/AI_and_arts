@@ -1,0 +1,131 @@
+{
+  "smoke_runs": [
+    {
+      "model": "3x512",
+      "exit_code": 0,
+      "report": {
+        "mode": "smoke",
+        "base_checkpoint": "models\\best_model_3x512.pt",
+        "base_sha256": "93a812286461d21f998d6bad3b8897ea04a23bfb0eb3a72d217089e83ae8dde2",
+        "base_parameters": 5934233,
+        "trainable_parameters": 140496,
+        "rank": 8,
+        "alpha": 16,
+        "targets": [
+          "lstm.weight_ih_l0",
+          "lstm.weight_hh_l0",
+          "lstm.weight_ih_l1",
+          "lstm.weight_hh_l1",
+          "lstm.weight_ih_l2",
+          "lstm.weight_hh_l2",
+          "tempo_projection.weight",
+          "pitch_head.weight",
+          "duration_head.weight",
+          "velocity_head.weight",
+          "timing_head.weight"
+        ],
+        "device": "cuda",
+        "seed": 42,
+        "split_seed": 42,
+        "sequence_length": 128,
+        "learning_rate": 0.0001,
+        "batch_size": 2,
+        "baseline_validation": {
+          "loss": 1.1485014183576716,
+          "pitch_accuracy": 0.6321353065539113,
+          "real_targets": 473
+        },
+        "history": [
+          {
+            "epoch": 1,
+            "train_loss": 1.5858912524810205,
+            "validation": {
+              "loss": 1.1484981528296279,
+              "pitch_accuracy": 0.6321353065539113,
+              "real_targets": 473
+            },
+            "steps": 3
+          }
+        ],
+        "best_adapter": "adapter_epoch_001.pt",
+        "validation_loss_improved": true,
+        "base_weights_unchanged": true,
+        "test_used_for_training": false,
+        "quality_claim": "Mechanics check only"
+      },
+      "adapter_bytes": 569825
+    },
+    {
+      "model": "4x768",
+      "exit_code": 0,
+      "report": {
+        "mode": "smoke",
+        "base_checkpoint": "models\\best_model_4x768.pt",
+        "base_sha256": "109ad239a4eab44c3f6c07bc466b59e522973cd66af9fd56ca17e2b0f36d3393",
+        "base_parameters": 17951385,
+        "trainable_parameters": 271568,
+        "rank": 8,
+        "alpha": 16,
+        "targets": [
+          "lstm.weight_ih_l0",
+          "lstm.weight_hh_l0",
+          "lstm.weight_ih_l1",
+          "lstm.weight_hh_l1",
+          "lstm.weight_ih_l2",
+          "lstm.weight_hh_l2",
+          "lstm.weight_ih_l3",
+          "lstm.weight_hh_l3",
+          "tempo_projection.weight",
+          "pitch_head.weight",
+          "duration_head.weight",
+          "velocity_head.weight",
+          "timing_head.weight"
+        ],
+        "device": "cuda",
+        "seed": 42,
+        "split_seed": 42,
+        "sequence_length": 256,
+        "learning_rate": 0.0001,
+        "batch_size": 2,
+        "baseline_validation": {
+          "loss": 1.1625071659666795,
+          "pitch_accuracy": 0.6499416569428238,
+          "real_targets": 857
+        },
+        "history": [
+          {
+            "epoch": 1,
+            "train_loss": 1.847435873641065,
+            "validation": {
+              "loss": 1.1625128998361363,
+              "pitch_accuracy": 0.6499416569428238,
+              "real_targets": 857
+            },
+            "steps": 3
+          }
+        ],
+        "best_adapter": "adapter_epoch_001.pt",
+        "validation_loss_improved": false,
+        "base_weights_unchanged": true,
+        "test_used_for_training": false,
+        "quality_claim": "Mechanics check only"
+      },
+      "adapter_bytes": 1095317
+    }
+  ],
+  "quality_claim": "No perceptual improvement established; adapters remain opt-in",
+  "reload_generation": [
+    {
+      "model": "3x512",
+      "adapter_status": "active: adapter_epoch_001.pt",
+      "notes": 2,
+      "within_duration_budget": true
+    },
+    {
+      "model": "4x768",
+      "adapter_status": "active: adapter_epoch_001.pt",
+      "notes": 2,
+      "within_duration_budget": true
+    }
+  ]
+}

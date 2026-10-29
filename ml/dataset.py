@@ -69,6 +69,7 @@ class EventWindowDataset(Dataset):
         if torch is None:
             raise RuntimeError("Training sequences require PyTorch; install requirements.txt first.")
         self.windows: list[torch.Tensor] = []
+        self.valid_lengths: list[int] = []
         self.sequence_length = sequence_length
         for path in files:
             try:
@@ -80,6 +81,7 @@ class EventWindowDataset(Dataset):
             for start in range(0, max(0, len(encoded) - 1), sequence_length):
                 seq = encoded[start:start + sequence_length + 1]
                 if len(seq) >= 3:
+                    self.valid_lengths.append(len(seq) - 1)
                     if len(seq) < sequence_length + 1:
                         seq += [seq[-1]] * (sequence_length + 1 - len(seq))
                     self.windows.append(torch.tensor(seq, dtype=torch.long))
@@ -94,4 +96,5 @@ class EventWindowDataset(Dataset):
         # the continuation toward a target that is not already in its context.
         target = y[-1, 0].clone()
         tempo = torch.tensor(100.0)
-        return x, y, target, tempo
+        mask = torch.arange(self.sequence_length) < self.valid_lengths[index]
+        return x, y, target, tempo, mask

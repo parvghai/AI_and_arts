@@ -1,0 +1,5 @@
+Validation date: 2026-10-29
+Command: python -B -m unittest discover -s tests -v
+Result: 41 tests passed in 19.557 seconds; process exit code 0.
+Includes CUDA subprocess exit, adapter training/frozen weights/merge/reload/model switching, evaluator integration, original upstream UI method comparison and existing music/reference/session regressions.
+Additional verification: three-step training on both real checkpoints exited 0; verified adapters reloaded and generated bounded continuations. All Python sources parsed.

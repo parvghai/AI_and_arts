@@ -250,6 +250,8 @@ def _make_features(events, local_times, alignment, annotations, instrument_id,
 def build_dataset(raw: Path, processed: Path, output: Path, stats_path: Path,
                   seed: int = 42, sequence_length: int = 256,
                   alignment_tolerance: float = .06) -> dict:
+    if (output / 'data').exists() or stats_path.exists():
+        raise ValueError('Choose a new --output and --stats path; existing experiment data is preserved.')
     midi_archives = _open_archives(raw, "*-midis.zip", r"^(\d{4})-")
     ann_archives = _open_archives(raw, "*-annotations*.zip", r"^(\d{4})-")
     assignment = _source_splits(processed, seed)

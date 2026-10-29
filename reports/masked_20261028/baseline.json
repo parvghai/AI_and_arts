@@ -1,0 +1,65 @@
+{
+  "protocol": "masked-v1",
+  "checkpoint": "models\\best_model_3x512.pt",
+  "checkpoint_sha256": "93a812286461d21f998d6bad3b8897ea04a23bfb0eb3a72d217089e83ae8dde2",
+  "split_files": [
+    18114,
+    2212,
+    2248
+  ],
+  "test_windows": 6715,
+  "split_filename_sha256": "ed5c975da747e098c5f0b670f201788fe96165f7a41f29d8f44d6715b63172b9",
+  "config": {
+    "data": "data\\processed",
+    "epochs": 30,
+    "batch_size": 32,
+    "sequence_length": 128,
+    "hidden_size": 512,
+    "embedding_size": 256,
+    "layers": 3,
+    "dropout": 0.25,
+    "learning_rate": 0.0005,
+    "temperature": 0.8,
+    "seed": 42,
+    "output": ".",
+    "vocab_size": 128,
+    "duration_vocab": 16,
+    "velocity_vocab": 8,
+    "timing_vocab": 16,
+    "device": "cuda",
+    "loss_weights": {
+      "pitch": 1.0,
+      "duration": 1.0,
+      "velocity": 0.5,
+      "timing": 0.5
+    },
+    "target_conditioning": "future_window_final_pitch"
+  },
+  "device": "cuda",
+  "torch_version": "2.11.0+cu128",
+  "real_targets": {
+    "target_events": 722172,
+    "loss": 1.0949923041156973,
+    "pitch_loss": 0.8756809095465952,
+    "duration_loss": 0.21562466619970447,
+    "velocity_loss": 2.20499329053885e-08,
+    "timing_loss": 0.0073734564323446215,
+    "pitch_accuracy": 0.6749181633105397,
+    "duration_mae_seconds": 0.057520757069244303,
+    "velocity_mae": 0.0,
+    "timing_mae_seconds": 0.08168071461952629
+  },
+  "legacy_including_padding": {
+    "target_events": 859520,
+    "loss": 0.9280732504574115,
+    "pitch_loss": 0.7421330233696052,
+    "duration_loss": 0.18248298980811595,
+    "velocity_loss": 1.8568462042482765e-08,
+    "timing_loss": 0.0069144697370990965,
+    "pitch_accuracy": 0.7252547933730454,
+    "duration_mae_seconds": 0.04865155577249076,
+    "velocity_mae": 0.0,
+    "timing_mae_seconds": 0.07850620113008074
+  },
+  "note": "Teacher forced, gold endpoint conditioned; MAE uses quantized representatives. No retraining."
+}

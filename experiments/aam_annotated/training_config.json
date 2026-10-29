@@ -1,0 +1,46 @@
+{
+  "mode": "full",
+  "layers": 4,
+  "hidden_size": 768,
+  "embedding_size": 384,
+  "dropout": 0.3,
+  "sequence_length": 256,
+  "batch_size": 16,
+  "learning_rate": 0.0003,
+  "seed": 42,
+  "vocab_sizes": {
+    "pitch": 128,
+    "duration": 16,
+    "velocity": 8,
+    "instrument": 33,
+    "chord": 27,
+    "key": 25
+  },
+  "categorical_features": [
+    "pitch",
+    "duration",
+    "velocity",
+    "instrument",
+    "chord",
+    "key"
+  ],
+  "numeric_features": [
+    "delta_beats_log_norm",
+    "beat_phase_sin",
+    "beat_phase_cos",
+    "within_beat",
+    "tempo_norm",
+    "onset_progress",
+    "duration_norm"
+  ],
+  "target_conditioning": "future_window_final_pitch",
+  "optimizer": "AdamW",
+  "weight_decay": 0.01,
+  "loss_weights": {
+    "pitch": 1.0,
+    "duration": 1.0,
+    "velocity": 0.5,
+    "timing": 0.5
+  },
+  "mixed_precision": "float16 autocast + GradScaler on CUDA"
+}

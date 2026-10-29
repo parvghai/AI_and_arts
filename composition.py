@@ -2,6 +2,7 @@
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from typing import Any
+import math
 
 
 @dataclass
@@ -12,6 +13,8 @@ class NoteEvent:
     velocity: int = 82
     source: str = "ai"
     label: str = ""
+    channel: int = 0
+    program: int = 0
 
 
 @dataclass
@@ -57,9 +60,8 @@ class Composition:
         if not self.interactions:
             return
         removed = self.interactions.pop()
-        count = len(removed.events)
-        if count:
-            del self.events[-count:]
+        removed_ids = {id(event) for event in removed.events}
+        self.events[:] = [event for event in self.events if id(event) not in removed_ids]
 
     def clear(self) -> None:
         self.interactions.clear()
@@ -88,11 +90,24 @@ def validate_timeline(events: list[NoteEvent], continuation_boundary: float | No
     issues: dict[str, list[dict[str, Any]]] = {
         "out_of_order": [], "negative_durations": [], "negative_delta_times": [],
         "accidental_overlaps": [], "duplicates": [], "before_continuation_boundary": [],
+        "invalid_values": [],
     }
     seen: dict[tuple[Any, ...], int] = {}
     previous_start: float | None = None
     last_by_source: dict[str, tuple[int, NoteEvent]] = {}
     for index, event in enumerate(events):
+        if (not all(isinstance(v, (int, float)) and math.isfinite(v)
+                    for v in (event.start, event.duration, event.pitch, event.velocity, event.channel, event.program))
+                or event.start < 0 or event.duration <= 0
+                or not all(isinstance(v, int) and not isinstance(v, bool)
+                           for v in (event.pitch, event.velocity, event.channel, event.program))
+                or not isinstance(event.source, str) or not isinstance(event.label, str)
+                or not 0 <= event.pitch <= 127 or int(event.pitch) != event.pitch
+                or not 1 <= event.velocity <= 127 or int(event.velocity) != event.velocity
+                or not 0 <= event.channel <= 15 or int(event.channel) != event.channel
+                or not 0 <= event.program <= 127 or int(event.program) != event.program):
+            issues["invalid_values"].append({"index": index})
+            continue
         if previous_start is not None and event.start < previous_start - tolerance:
             issues["out_of_order"].append({"index": index, "start": event.start,
                                             "previous_start": previous_start})
@@ -105,7 +120,7 @@ def validate_timeline(events: list[NoteEvent], continuation_boundary: float | No
         if continuation_boundary is not None and event.start < continuation_boundary - tolerance:
             issues["before_continuation_boundary"].append({"index": index, "start": event.start,
                                                             "boundary": continuation_boundary})
-        key = (event.source, int(event.pitch), round(event.start, 6), round(event.duration, 6),
+        key = (event.source, event.channel, int(event.pitch), round(event.start, 6), round(event.duration, 6),
                int(event.velocity))
         if key in seen:
             issues["duplicates"].append({"index": index, "duplicate_of": seen[key],
@@ -139,8 +154,10 @@ def sanitize_timeline(events: list[NoteEvent], continuation_boundary: float,
     seen_sanitized: set[tuple[Any, ...]] = set()
     last_end: dict[str, float] = {}
     for original in sorted(events, key=lambda e: (e.start, 0 if e.source == "human" else 1, e.pitch)):
+        if not all(math.isfinite(v) for v in (original.start, original.duration, original.pitch, original.velocity)):
+            raise ValueError("Note times, pitches and velocities must be finite")
         event = NoteEvent(int(original.pitch), float(original.start), float(original.duration),
-                          int(original.velocity), original.source, original.label)
+                          int(original.velocity), original.source, original.label, original.channel, original.program)
         original_key = (event.source, event.pitch, round(event.start, 6),
                         round(event.duration, 6), event.velocity)
         if original_key in seen_original:

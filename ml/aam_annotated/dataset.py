@@ -56,4 +56,6 @@ class AAMWindowDataset(Dataset):
         return (torch.from_numpy(x_cat), torch.from_numpy(x_num),
                 torch.from_numpy(y_cat[:, :3].copy()),
                 torch.from_numpy(y_num[:, 0].copy()),
-                torch.tensor(target_note, dtype=torch.long))
+                torch.tensor(target_note, dtype=torch.long),
+                torch.arange(self.sequence_length) < (available - 1),
+                torch.from_numpy(y_num[:, 4].copy()))

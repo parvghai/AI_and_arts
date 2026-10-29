@@ -1,0 +1,676 @@
+{
+  "generated_utc": "2026-10-07T18:08:36.499019+00:00",
+  "scope": "Historical AAM local-archive audit; MIDI model inputs only; audio headers inspected; no extraction or training in this audit snapshot",
+  "archive_counts": {
+    "midi_archives": 3,
+    "annotation_archives": 3,
+    "audio_archives": 3,
+    "info_archives": 1
+  },
+  "archive_inventory": [
+    {
+      "archive": "0001-1000-midis.zip",
+      "component_type": "midi",
+      "archive_bytes": 2108953,
+      "members": 6275,
+      "valid_files": 6275,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "1001-2000-midis.zip",
+      "component_type": "midi",
+      "archive_bytes": 3544696,
+      "members": 7920,
+      "valid_files": 7920,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "2001-3000-midis.zip",
+      "component_type": "midi",
+      "archive_bytes": 3835784,
+      "members": 8379,
+      "valid_files": 8379,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "0001-1000-annotations-v1.1.0.zip",
+      "component_type": "annotations",
+      "archive_bytes": 8451769,
+      "members": 3000,
+      "valid_files": 3000,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "1001-2000-annotations-v1.1.0.zip",
+      "component_type": "annotations",
+      "archive_bytes": 8601012,
+      "members": 3000,
+      "valid_files": 3000,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "2001-3000-annotations-v1.1.0.zip",
+      "component_type": "annotations",
+      "archive_bytes": 8745087,
+      "members": 3000,
+      "valid_files": 3000,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "0001-1000-audio-mixes.zip",
+      "component_type": "audio_reference_only",
+      "archive_bytes": 14710551938,
+      "members": 1000,
+      "valid_files": 1000,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "1001-2000-audio-mixes.zip",
+      "component_type": "audio_reference_only",
+      "archive_bytes": 14730539954,
+      "members": 1000,
+      "valid_files": 1000,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "2001-3000-audio-mixes.zip",
+      "component_type": "audio_reference_only",
+      "archive_bytes": 14778424664,
+      "members": 1000,
+      "valid_files": 1000,
+      "invalid_files": 0,
+      "source_id_count": 1000
+    },
+    {
+      "archive": "info.zip",
+      "component_type": "metadata_and_sampler_patches",
+      "archive_bytes": 11464390,
+      "members": 35,
+      "valid_files": 35,
+      "invalid_files": 0,
+      "source_id_count": 0
+    }
+  ],
+  "midi": {
+    "discovered": 22574,
+    "valid": 22574,
+    "invalid": 0,
+    "empty": 0,
+    "too_short_for_training": 0,
+    "events": 7552855,
+    "formats": {
+      "1": 4981,
+      "0": 17593
+    },
+    "duration_seconds": {
+      "count": 22574,
+      "min": 62.83315200000001,
+      "median": 148.2454305,
+      "mean": 146.4008463780234,
+      "max": 180.98350399999998
+    },
+    "tracks_per_file": {
+      "count": 22574,
+      "min": 1,
+      "median": 1.0,
+      "mean": 3.518251085319394,
+      "max": 16
+    },
+    "explicit_tempo_bpm": {
+      "count": 471859,
+      "min": 60.0,
+      "median": 125.0,
+      "mean": 123.41841432099419,
+      "max": 180.00018
+    },
+    "note_duration_seconds": {
+      "count": 7552855,
+      "min": 0.1,
+      "median": 0.30000000000000004,
+      "mean": 0.5674299983251367,
+      "max": 4.0
+    },
+    "pitch_range": [
+      35,
+      90
+    ],
+    "program_numbers": {
+      "57": 1169,
+      "17": 1253,
+      "66": 663,
+      "24": 4063,
+      "32": 1231,
+      "4": 1444,
+      "110": 1763,
+      "104": 1442,
+      "41": 620,
+      "43": 1287,
+      "77": 621,
+      "42": 1568,
+      "33": 1218,
+      "56": 671,
+      "40": 575,
+      "1": 1520,
+      "0": 1505,
+      "29": 1524,
+      "75": 647,
+      "30": 609,
+      "73": 662,
+      "65": 599,
+      "76": 582,
+      "71": 604,
+      "27": 1516
+    },
+    "time_signatures": {},
+    "exact_duplicate_content_groups": 0,
+    "overlap": {
+      "files_with_overlapping_notes": 21929,
+      "notes_with_prior_overlap": 4748127,
+      "overlapping_note_pairs": 16530269,
+      "same_pitch_overlap_pairs": 1036175
+    }
+  },
+  "annotations": {
+    "beatinfo": {
+      "files": 3000,
+      "rows": 874308,
+      "malformed_rows": 0,
+      "attributes": {
+        "Start time in seconds": "NUMERIC",
+        "Bar count": "NUMERIC",
+        "Quarter count": "NUMERIC",
+        "Chord name": "STRING"
+      },
+      "onset_event_values": 0,
+      "common_values": {
+        "Chord name": [
+          [
+            "Fmaj",
+            40356
+          ],
+          [
+            "A#maj",
+            40356
+          ],
+          [
+            "Gmaj",
+            40310
+          ],
+          [
+            "Cmaj",
+            39334
+          ],
+          [
+            "Amaj",
+            38536
+          ],
+          [
+            "D#maj",
+            38382
+          ],
+          [
+            "Emaj",
+            38218
+          ],
+          [
+            "C#maj",
+            37772
+          ],
+          [
+            "Bmaj",
+            37594
+          ],
+          [
+            "Dmaj",
+            37590
+          ],
+          [
+            "F#maj",
+            37294
+          ],
+          [
+            "G#maj",
+            36056
+          ],
+          [
+            "Gmin",
+            34894
+          ],
+          [
+            "Dmin",
+            33958
+          ],
+          [
+            "Amin",
+            33886
+          ]
+        ]
+      }
+    },
+    "onsets": {
+      "files": 3000,
+      "rows": 1712284,
+      "malformed_rows": 0,
+      "attributes": {
+        "Onset time in seconds": "NUMERIC",
+        "Onset events of AcousticGuitar": "STRING",
+        "Onset events of AltoSax": "STRING",
+        "Onset events of Balalaika": "STRING",
+        "Onset events of BrightPiano": "STRING",
+        "Onset events of Cello": "STRING",
+        "Onset events of Clarinet": "STRING",
+        "Onset events of DoubleBassArco": "STRING",
+        "Onset events of DoubleBassPizz": "STRING",
+        "Onset events of Drums": "STRING",
+        "Onset events of ElectricBass": "STRING",
+        "Onset events of ElectricGuitarClean": "STRING",
+        "Onset events of ElectricGuitarCrunch": "STRING",
+        "Onset events of ElectricGuitarLead": "STRING",
+        "Onset events of ElectricPiano": "STRING",
+        "Onset events of Erhu": "STRING",
+        "Onset events of Flugelhorn": "STRING",
+        "Onset events of Flute": "STRING",
+        "Onset events of Fujara": "STRING",
+        "Onset events of Jinghu": "STRING",
+        "Onset events of MorinKhuur": "STRING",
+        "Onset events of OrganBass": "STRING",
+        "Onset events of PanFlute": "STRING",
+        "Onset events of Piano": "STRING",
+        "Onset events of Shakuhachi": "STRING",
+        "Onset events of Sitar": "STRING",
+        "Onset events of TenorSax": "STRING",
+        "Onset events of Trombone": "STRING",
+        "Onset events of Trumpet": "STRING",
+        "Onset events of Ukulele": "STRING",
+        "Onset events of Viola": "STRING",
+        "Onset events of Violin": "STRING"
+      },
+      "onset_event_values": 9583735,
+      "common_values": {}
+    },
+    "segments": {
+      "files": 3000,
+      "rows": 28456,
+      "malformed_rows": 0,
+      "attributes": {
+        "Start time in seconds": "NUMERIC",
+        "Mark": "STRING",
+        "Tempo": "NUMERIC",
+        "Key": "STRING",
+        "Instruments": "STRING",
+        "Generator": "STRING"
+      },
+      "onset_event_values": 0,
+      "common_values": {
+        "Mark": [
+          [
+            "A",
+            8934
+          ],
+          [
+            "C",
+            5888
+          ],
+          [
+            "B",
+            5856
+          ],
+          [
+            "D",
+            3306
+          ],
+          [
+            "end",
+            3000
+          ],
+          [
+            "E",
+            1472
+          ]
+        ],
+        "Tempo": [
+          [
+            "0",
+            3000
+          ],
+          [
+            "140",
+            363
+          ],
+          [
+            "106",
+            344
+          ],
+          [
+            "162",
+            338
+          ],
+          [
+            "173",
+            310
+          ],
+          [
+            "176",
+            308
+          ],
+          [
+            "141",
+            303
+          ],
+          [
+            "78",
+            300
+          ],
+          [
+            "152",
+            293
+          ],
+          [
+            "150",
+            280
+          ],
+          [
+            "146",
+            279
+          ],
+          [
+            "132",
+            275
+          ],
+          [
+            "177",
+            269
+          ],
+          [
+            "168",
+            267
+          ],
+          [
+            "164",
+            266
+          ]
+        ],
+        "Key": [
+          [
+            "D#min",
+            1176
+          ],
+          [
+            "Fmaj",
+            1173
+          ],
+          [
+            "Emaj",
+            1159
+          ],
+          [
+            "D#maj",
+            1152
+          ],
+          [
+            "Gmin",
+            1145
+          ],
+          [
+            "Bmin",
+            1114
+          ],
+          [
+            "Fmin",
+            1083
+          ],
+          [
+            "Amin",
+            1081
+          ],
+          [
+            "A#maj",
+            1079
+          ],
+          [
+            "Gmaj",
+            1074
+          ],
+          [
+            "Bmaj",
+            1064
+          ],
+          [
+            "Dmin",
+            1059
+          ],
+          [
+            "C#maj",
+            1053
+          ],
+          [
+            "Dmaj",
+            1051
+          ],
+          [
+            "Cmaj",
+            1047
+          ]
+        ],
+        "Generator": [
+          [
+            "[MelodyBow,ChordPadsRanged,BassLine,RhythmSimpleGrooves]",
+            6692
+          ],
+          [
+            "[MelodyBow,ChordPadsRanged,ChordArpeggios,BassLine,RhythmSimpleGrooves]",
+            6627
+          ],
+          [
+            "[]",
+            3000
+          ],
+          [
+            "[MelodyBow,BassLine,RhythmSimpleGrooves]",
+            1679
+          ],
+          [
+            "[MelodyBow,ChordPadsRanged,ChordArpeggios,BassLine]",
+            1657
+          ],
+          [
+            "[MelodyBow,ChordArpeggios,BassLine,RhythmSimpleGrooves]",
+            1619
+          ],
+          [
+            "[MelodyBow,ChordPadsRanged,BassLine]",
+            1546
+          ],
+          [
+            "[ChordPadsRanged,BassLine,RhythmSimpleGrooves]",
+            740
+          ],
+          [
+            "[ChordPadsRanged,ChordArpeggios,BassLine,RhythmSimpleGrooves]",
+            719
+          ],
+          [
+            "[MelodyBow,ChordPadsRanged,RhythmSimpleGrooves]",
+            715
+          ],
+          [
+            "[MelodyBow,ChordPadsRanged,ChordArpeggios,RhythmSimpleGrooves]",
+            680
+          ],
+          [
+            "[MelodyBow,ChordArpeggios,BassLine]",
+            456
+          ],
+          [
+            "[MelodyBow,BassLine]",
+            418
+          ],
+          [
+            "[BassLine,RhythmSimpleGrooves]",
+            194
+          ],
+          [
+            "[MelodyBow,RhythmSimpleGrooves]",
+            190
+          ]
+        ]
+      }
+    }
+  },
+  "audio_reference_only": {
+    "files": 3000,
+    "valid_flac_headers": 3000,
+    "invalid_flac_headers": 0,
+    "duration_seconds": {
+      "count": 3000,
+      "min": 122.72083900226757,
+      "median": 159.13945578231292,
+      "mean": 156.5474334542706,
+      "max": 183.70460317460316
+    },
+    "sample_rates_hz": {
+      "44100": 3000
+    },
+    "channels": {
+      "1": 3000
+    },
+    "compressed_bytes": 44219028774,
+    "uncompressed_bytes": 44219028774,
+    "read_policy": "Only 42-byte FLAC headers were read per archive member; audio frames were not decoded."
+  },
+  "source_id_mapping": {
+    "ids": {
+      "midi": 3000,
+      "annotations": 3000,
+      "audio": 3000
+    },
+    "midi_missing_annotation_ids": [],
+    "annotation_missing_midi_ids": [],
+    "midi_missing_audio_ids": [],
+    "audio_missing_midi_ids": [],
+    "midi_files_per_source_id": {
+      "count": 3000,
+      "min": 3,
+      "median": 7.0,
+      "mean": 7.524666666666667,
+      "max": 14
+    }
+  },
+  "processed_midi": {
+    "jsonl_files": 22574,
+    "valid_jsonl_lines": 7552855,
+    "invalid_jsonl_lines": 0,
+    "unmapped_raw_midi_files": 0,
+    "events_per_file": {
+      "count": 22574,
+      "min": 4,
+      "median": 141.0,
+      "mean": 334.5820412864357,
+      "max": 3575
+    },
+    "split_seed": 42,
+    "splits": {
+      "train": {
+        "files": 18114,
+        "source_groups": 2400,
+        "events": 6061647,
+        "windows_128": 55879,
+        "windows_256": 34039
+      },
+      "validation": {
+        "files": 2212,
+        "source_groups": 300,
+        "events": 766783,
+        "windows_128": 7030,
+        "windows_256": 4235
+      },
+      "test": {
+        "files": 2248,
+        "source_groups": 300,
+        "events": 724425,
+        "windows_128": 6715,
+        "windows_256": 4130
+      }
+    },
+    "source_id_split_leaks": 0,
+    "approx_training_target_tokens": {
+      "128": 7152512,
+      "256": 8713984
+    }
+  },
+  "info_zip": {
+    "archive": "info.zip",
+    "path": "data/raw/info.zip",
+    "archive_bytes": 11464390,
+    "members": 35,
+    "member_types": {
+      ".conf": 3,
+      ".txt": 1,
+      ".nkm": 31
+    },
+    "configs": [
+      {
+        "file": "config/AAM2020-1001-2000.conf",
+        "active_setting_lines": [
+          "number-of-different-songparts = 4"
+        ]
+      },
+      {
+        "file": "config/AAM2020-2001-3000.conf",
+        "active_setting_lines": [
+          "number-of-different-songparts = 5"
+        ]
+      },
+      {
+        "file": "config/AAM2020-0001-1000.conf",
+        "active_setting_lines": []
+      }
+    ],
+    "instrument_catalog_lines": 35,
+    "patch_files": [
+      "patches/Clarinet.nkm",
+      "patches/PanFlute.nkm",
+      "patches/Trumpet.nkm",
+      "patches/MorinKhuur.nkm",
+      "patches/AltoSax.nkm",
+      "patches/Piano.nkm",
+      "patches/ElectricGuitarClean.nkm",
+      "patches/TenorSax.nkm",
+      "patches/AcousticGuitar.nkm",
+      "patches/Flute.nkm",
+      "patches/DoubleBassPizz.nkm",
+      "patches/Drums.nkm",
+      "patches/DoubleBassArco.nkm",
+      "patches/Erhu.nkm",
+      "patches/Balalaika.nkm",
+      "patches/Jinghu.nkm",
+      "patches/Shakuhachi.nkm",
+      "patches/Flugelhorn.nkm",
+      "patches/Viola.nkm",
+      "patches/Ukulele.nkm",
+      "patches/Sitar.nkm",
+      "patches/ElectricGuitarCrunch.nkm",
+      "patches/ElectricBass.nkm",
+      "patches/OrganBass.nkm",
+      "patches/Violin.nkm",
+      "patches/Cello.nkm",
+      "patches/Fujara.nkm",
+      "patches/ElectricGuitarLead.nkm",
+      "patches/Trombone.nkm",
+      "patches/ElectricPiano.nkm",
+      "patches/BrightPiano.nkm"
+    ],
+    "sha256": "113c265ffb48c44d67fa7806a11b2aa222ff35153ddd35ba96a8142678812ba7"
+  },
+  "errors_sample": [],
+  "processed_errors_sample": [],
+  "note": "Historical snapshot generated 2026-10-07 before annotation-aware preprocessing/training; current experiment details are in aam_annotated_dataset_stats.json."
+}

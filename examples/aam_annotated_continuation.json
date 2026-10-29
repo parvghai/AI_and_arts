@@ -1,0 +1,167 @@
+{
+  "checkpoint": "(checkpoint excluded from repository)",
+  "source_id": 1,
+  "source_member": "0001_Drums.mid",
+  "split": "train",
+  "target_pitch": 60,
+  "composition_end_seconds": 120.010735,
+  "tempo_bpm": 91.99999809265137,
+  "requested_seconds": 8.0,
+  "generated_notes": 19,
+  "events": [
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.08401198600913062,
+      "absolute_start_seconds": 120.09474698600913,
+      "absolute_end_seconds": 120.51974698600912
+    },
+    {
+      "pitch": 59,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 120.51974698600912,
+      "absolute_end_seconds": 120.94474698600912
+    },
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 120.94474698600912,
+      "absolute_end_seconds": 121.36974698600912
+    },
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 121.36974698600912,
+      "absolute_end_seconds": 121.79474698600912
+    },
+    {
+      "pitch": 38,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 121.79474698600912,
+      "absolute_end_seconds": 122.21974698600911
+    },
+    {
+      "pitch": 59,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 122.21974698600911,
+      "absolute_end_seconds": 122.64474698600911
+    },
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.5136252355234348,
+      "absolute_start_seconds": 122.73337222153255,
+      "absolute_end_seconds": 123.15837222153255
+    },
+    {
+      "pitch": 42,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 123.15837222153255,
+      "absolute_end_seconds": 123.58337222153254
+    },
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 123.58337222153254,
+      "absolute_end_seconds": 124.00837222153254
+    },
+    {
+      "pitch": 38,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 124.00837222153254,
+      "absolute_end_seconds": 124.43337222153254
+    },
+    {
+      "pitch": 42,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 124.43337222153254,
+      "absolute_end_seconds": 124.85837222153253
+    },
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 124.85837222153253,
+      "absolute_end_seconds": 125.28337222153253
+    },
+    {
+      "pitch": 42,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 125.28337222153253,
+      "absolute_end_seconds": 125.70837222153253
+    },
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 125.70837222153253,
+      "absolute_end_seconds": 126.13337222153253
+    },
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 126.13337222153253,
+      "absolute_end_seconds": 126.55837222153252
+    },
+    {
+      "pitch": 38,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 126.55837222153252,
+      "absolute_end_seconds": 126.98337222153252
+    },
+    {
+      "pitch": 42,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 126.98337222153252,
+      "absolute_end_seconds": 127.40837222153252
+    },
+    {
+      "pitch": 42,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.4510614362034886,
+      "absolute_start_seconds": 127.43443365773601,
+      "absolute_end_seconds": 127.859433657736
+    },
+    {
+      "pitch": 36,
+      "duration_seconds": 0.425,
+      "velocity": 56,
+      "delta_seconds": 0.42499999999999716,
+      "absolute_start_seconds": 127.859433657736,
+      "absolute_end_seconds": 128.284433657736
+    }
+  ],
+  "output_midi": "aam_annotated_continuation.mid",
+  "device": "cuda"
+}

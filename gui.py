@@ -20,6 +20,9 @@ except ImportError:  # PyTorch is an optional training/inference dependency.
         loaded = False
         config = {}
         temperature = 0.8
+        load_error = 'PyTorch is unavailable; install it to use LSTM/LoRA models'
+        adapter_status = 'disabled'
+        adapter_path = None
         def __init__(self, *args, **kwargs): pass
         def load_checkpoint(self, *args, **kwargs): pass
 
@@ -31,7 +34,7 @@ NOTE_KEYS["h"] = "B"
 
 
 class MusicApp:
-    def __init__(self) -> None:
+    def __init__(self, adapter_hint=None) -> None:
         self.root = tk.Tk()
         self.root.title("AI Music Co-Creator • Music Studio")
         self.root.geometry("980x720")
@@ -53,6 +56,7 @@ class MusicApp:
         self._closed = False
         self._busy_controls: list[tk.Widget] = []
         self._note_buttons: list[tk.Button] = []
+        self._adapter_hint = adapter_hint
         self._build()
         self.root.bind_all("<KeyPress>", self._handle_note_key)
         self._draw_timeline()
@@ -124,6 +128,7 @@ class MusicApp:
         self._busy_controls.extend((self.model_box, self.duration_box, self.tempo_scale, self.temperature_scale))
         exportbar = tk.Frame(self.root, bg=BG)
         exportbar.pack(fill="x", padx=28, pady=(0, 5))
+        self._build_lora_controls(exportbar)
         self._button(exportbar, "Export MIDI", self._export_midi).pack(side="right", padx=4)
         self._button(exportbar, "Export interaction log", self._export_log).pack(side="right", padx=4)
         statusbar = tk.Frame(self.root, bg=PANEL, padx=14, pady=10)
@@ -147,8 +152,28 @@ class MusicApp:
                          activebackground="#354761", activeforeground=TEXT, relief="flat",
                          padx=12, pady=9, cursor="hand2")
 
+    def _build_lora_controls(self, parent):
+        from lora_controls import LoRAControls
+        self.lora = LoRAControls(self, parent, APP_DIR / 'runs' / 'lora', self._adapter_hint)
+
+    def _selected_checkpoint(self):
+        stem = LSTMGenerator.CHECKPOINTS[self.model_choice.get()]
+        return APP_DIR / 'models' / stem
+
+    def _reload_selected_generator(self, adapter):
+        self._set_busy(True)
+        self.root.update_idletasks()
+        try:
+            self.ml_generator = LSTMGenerator(self._selected_checkpoint(),
+                                               temperature=self.temperature.get(), adapter=adapter)
+        finally:
+            self._set_busy(False)
+
     def _choose_note(self, note: str) -> None:
         if self._generating:
+            return
+        if not self.lora.ready:
+            self.status.set('LoRA is enabled but not ready. Apply a compatible adapter or turn LoRA OFF.')
             return
         self._generating = True
         duration = {"0.5 seconds": 0.5, "1 second": 1.0, "2 seconds": 2.0}[self.duration.get()]
@@ -172,6 +197,8 @@ class MusicApp:
 
     def _handle_note_key(self, event: tk.Event) -> str | None:
         """Use natural-note keys globally; H is accepted as German B natural."""
+        if getattr(event, 'widget', self.root).winfo_toplevel() != self.root:
+            return None  # Adapter settings/dialog typing must not generate notes.
         note = NOTE_KEYS.get(str(getattr(event, "char", "")).lower())
         if note is None:
             return None
@@ -179,16 +206,20 @@ class MusicApp:
         return "break"
 
     def _select_model(self, _event=None) -> None:
+        if self._generating:
+            return
         stem = LSTMGenerator.CHECKPOINTS.get(self.model_choice.get())
         if not stem:
             return
         self.status.set(f"Loading {self.model_choice.get()}...")
-        self.ml_generator.load_checkpoint(APP_DIR / "models" / stem)
+        self.player.stop()
+        self._reload_selected_generator(None)
         if not self.ml_generator.loaded:
             self.status.set(self.ml_generator.load_error or "Selected checkpoint unavailable")
         else:
             self.status.set(f"Loaded {self.model_choice.get()}")
         self._refresh_model_label()
+        self.lora.model_changed()
 
     def _safe_generate_worker(self, note: str, duration: float, bpm: int, temperature: float,
                               chosen_at: str, previous: list[dict], input_interval: float | None) -> None:
@@ -215,6 +246,8 @@ class MusicApp:
                 model_name = (f"LSTM {self.ml_generator.config.get('layers')}x"
                               f"{self.ml_generator.config.get('hidden_size')}")
             except Exception as exc:
+                if self.lora.enabled.get():
+                    raise RuntimeError(f'LoRA generation failed: {exc}; no fallback was generated') from exc
                 error = f"LSTM inference failed: {exc}"
                 generated = self.generator.generate_continuation(self.composition,note,duration,bpm)
                 model_name = "rule-based fallback"
@@ -307,6 +340,12 @@ class MusicApp:
             details=error or getattr(self.ml_generator,"load_error",None)
             if details:
                 text+=f"\n{details}"
+        lora = getattr(self, 'lora', None)
+        if lora is not None and lora.enabled.get():
+            if lora.ready:
+                text += ' · LoRA active'
+            else:
+                text = f'AI Model: {self.model_choice.get()} · LoRA not ready'
         self.model_label.config(text=text)
 
     def _set_busy(self, busy: bool) -> None:
@@ -315,7 +354,7 @@ class MusicApp:
             button.configure(state=state)
         for widget in self._busy_controls:
             try:
-                widget.configure(state="disabled" if busy else ("readonly" if widget is self.duration_box else "normal"))
+                widget.configure(state="disabled" if busy else ("readonly" if isinstance(widget, ttk.Combobox) else "normal"))
             except tk.TclError:
                 pass
 
@@ -397,10 +436,16 @@ class MusicApp:
 
     def _save_log(self) -> None:
         try:
-            LOG_DIR.mkdir(parents=True, exist_ok=True)
-            stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ")
-            path = LOG_DIR / f"session_{stamp}.json"
-            path.write_text(json.dumps(self.composition.to_dict(), indent=2), encoding="utf-8")
+            if not self.composition.events and not hasattr(self, '_autosave_path'):
+                return
+            folder = LOG_DIR / 'sessions'
+            folder.mkdir(parents=True, exist_ok=True)
+            if not hasattr(self, '_autosave_path'):
+                stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ")
+                self._autosave_path = folder / f"session_{stamp}.json"
+            temporary = self._autosave_path.with_suffix('.tmp')
+            temporary.write_text(json.dumps(self.composition.to_dict(), indent=2), encoding="utf-8")
+            temporary.replace(self._autosave_path)
         except OSError as exc:
             self.status.set(f"Log save failed: {exc}")
 

@@ -1,0 +1,36 @@
+{
+  "dataset": "AAM MIDI + AAM annotations v1.1.0",
+  "raw_dir": "data\\raw",
+  "processed_midi_dir": "data\\processed",
+  "output_dir": "experiments\\aam_annotated",
+  "split_seed": 42,
+  "split_source": "existing MIDI-only split_files source-ID assignments",
+  "sequence_length": 256,
+  "alignment_tolerance_seconds": 0.06,
+  "audio_used": false,
+  "onset_annotations_used_as_pitch_input": false,
+  "invalid_timing_policy": "reject malformed MIDI/ARFF; retain valid polyphony; mark annotation context unknown when onset alignment fails",
+  "timing": {
+    "MIDI event onset": "relative MIDI event time + validated source onset offset",
+    "beat alignment": "continuous interpolation between beatinfo timestamps",
+    "delta feature": "log-normalized inter-onset interval in beats",
+    "absolute onset": "normalized progress through annotation timeline"
+  },
+  "categorical_features": [
+    "pitch",
+    "duration",
+    "velocity",
+    "instrument",
+    "chord",
+    "key"
+  ],
+  "numeric_features": [
+    "delta_beats_log_norm",
+    "beat_phase_sin",
+    "beat_phase_cos",
+    "within_beat",
+    "tempo_norm",
+    "onset_progress",
+    "duration_norm"
+  ]
+}

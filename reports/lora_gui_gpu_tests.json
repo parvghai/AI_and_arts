@@ -1,0 +1,18 @@
+[
+  {
+    "model": "3x512",
+    "exit_code": 0,
+    "device": "cuda",
+    "base_weights_unchanged": true,
+    "steps": 3,
+    "temporary_outputs_removed": true
+  },
+  {
+    "model": "4x768",
+    "exit_code": 0,
+    "device": "cuda",
+    "base_weights_unchanged": true,
+    "steps": 3,
+    "temporary_outputs_removed": true
+  }
+]

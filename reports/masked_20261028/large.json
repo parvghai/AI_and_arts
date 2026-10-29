@@ -1,0 +1,70 @@
+{
+  "protocol": "masked-v1",
+  "checkpoint": "models\\best_model_4x768.pt",
+  "checkpoint_sha256": "109ad239a4eab44c3f6c07bc466b59e522973cd66af9fd56ca17e2b0f36d3393",
+  "split_files": [
+    18114,
+    2212,
+    2248
+  ],
+  "test_windows": 4130,
+  "split_filename_sha256": "ed5c975da747e098c5f0b670f201788fe96165f7a41f29d8f44d6715b63172b9",
+  "config": {
+    "data": "data\\processed",
+    "epochs": 30,
+    "batch_size": 16,
+    "sequence_length": 256,
+    "hidden_size": 768,
+    "embedding_size": 384,
+    "layers": 4,
+    "dropout": 0.3,
+    "learning_rate": 0.0003,
+    "weight_decay": 0.01,
+    "gradient_accumulation": 2,
+    "top_k": 20,
+    "top_p": 0.9,
+    "model_name": null,
+    "temperature": 0.8,
+    "seed": 42,
+    "output": ".",
+    "vocab_size": 128,
+    "duration_vocab": 16,
+    "velocity_vocab": 8,
+    "timing_vocab": 16,
+    "device": "cuda",
+    "loss_weights": {
+      "pitch": 1.0,
+      "duration": 1.0,
+      "velocity": 0.5,
+      "timing": 0.5
+    },
+    "target_conditioning": "future_window_final_pitch"
+  },
+  "device": "cuda",
+  "torch_version": "2.11.0+cu128",
+  "real_targets": {
+    "target_events": 722173,
+    "loss": 1.0582735556817846,
+    "pitch_loss": 0.8462078606444057,
+    "duration_loss": 0.20855788405422973,
+    "velocity_loss": 5.296639451167292e-08,
+    "timing_loss": 0.0070155935287350285,
+    "pitch_accuracy": 0.684254331105043,
+    "duration_mae_seconds": 0.05583748634666287,
+    "velocity_mae": 0.0,
+    "timing_mae_seconds": 0.08097038380294758
+  },
+  "legacy_including_padding": {
+    "target_events": 1057280,
+    "loss": 0.7292876719273897,
+    "pitch_loss": 0.5830237881611969,
+    "duration_loss": 0.14354177853385702,
+    "velocity_loss": 3.862627424690784e-08,
+    "timing_loss": 0.005444192055152779,
+    "pitch_accuracy": 0.7829903147699758,
+    "duration_mae_seconds": 0.038387773204008546,
+    "velocity_mae": 0.0,
+    "timing_mae_seconds": 0.06596989463518664
+  },
+  "note": "Teacher forced, gold endpoint conditioned; MAE uses quantized representatives. No retraining."
+}

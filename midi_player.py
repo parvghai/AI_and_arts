@@ -69,10 +69,10 @@ class MidiPlayer:
                                         args=(list(events),self._stop,self._pause),daemon=True)
         self._thread.start()
 
-    def _send(self, pitch: int, velocity: int, note_on: bool) -> None:
+    def _send(self, pitch: int, velocity: int, note_on: bool, channel: int = 0) -> None:
         if not self._midi:
             return
-        status = 0x90 if note_on else 0x80
+        status = (0x90 if note_on else 0x80) | channel
         message = status | (max(0, min(127, pitch)) << 8) | (max(0, min(127, velocity)) << 16)
         self._midi.midiOutShortMsg(self._handle, message)
 
@@ -92,17 +92,28 @@ class MidiPlayer:
         schedule = []
         for event in events:
             on_time = max(0.0, event.start - origin)
-            off_time = on_time + max(0.05, event.duration)
+            off_time = on_time + max(0.001, event.duration)
             schedule.append((on_time, 1, event))
             schedule.append((off_time, 0, event))
         schedule.sort(key=lambda row: (row[0], row[1]))
         clock = time.monotonic()
+        active = {}
+        if self._midi:
+            for event in events:
+                self._midi.midiOutShortMsg(self._handle, 0xC0 | event.channel | (event.program << 8))
         try:
             for due, is_on, event in schedule:
                 while not stop_event.is_set():
                     if pause_event.is_set():
-                        time.sleep(0.03)
-                        clock += 0.03
+                        paused_at = time.monotonic()
+                        if self._midi:
+                            self._midi.midiOutReset(self._handle)
+                        while pause_event.is_set() and not stop_event.is_set():
+                            time.sleep(0.02)
+                        clock += time.monotonic() - paused_at
+                        if not stop_event.is_set():
+                            for held in active.values():
+                                self._send(held.pitch, held.velocity, True, held.channel)
                         continue
                     remaining = due - (time.monotonic() - clock)
                     if remaining <= 0:
@@ -111,7 +122,12 @@ class MidiPlayer:
                 if stop_event.is_set():
                     break
                 if self._midi:
-                    self._send(event.pitch, event.velocity if is_on else 0, bool(is_on))
+                    key = (event.channel, event.pitch)
+                    if is_on:
+                        active[key] = event
+                    else:
+                        active.pop(key, None)
+                    self._send(event.pitch, event.velocity if is_on else 0, bool(is_on), event.channel)
                 elif is_on and self._beep:
                     try:
                         self._beep(midi_to_frequency(event.pitch), max(70, int(event.duration * 1000)))

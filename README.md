@@ -1,5 +1,24 @@
 # AI Music Co-Creator
 
+## Current local version (29 October 2026)
+
+The default app restores the original single-screen UI from [parvghai/AI_and_arts](https://github.com/parvghai/AI_and_arts/tree/79b7255daa09821fceca6d6b0f404a8ad77a6f5c): the same colors, controls, note buttons, timeline and immediate continuation playback. The extended reference/candidate/editor interface remains available with `--studio`.
+
+```powershell
+python -B main.py
+# Optional extended tools:
+python -B main.py --studio
+# Train a separate LoRA adapter (does not modify the base checkpoint):
+python -B -m ml.train_lora --base models/best_model_3x512.pt --data data/processed --output runs/lora/my_style
+# Suggest an adapter in the GUI (still starts OFF; enable, select and Apply):
+python -B main.py --adapter runs/lora/my_style/adapter_epoch_001.pt
+```
+
+Read [LoRA setup and evaluation](docs/LORA.md), [implementation notes](IMPLEMENTATION_REPORT.md), and [workspace cleanup](CLEANUP_REPORT.md). **Enable LoRA** beside the export controls opens compatible-adapter selection; select an adapter and click **Apply adapter**. Uncheck it to restore the base model. LoRA always starts OFF. See [GUI implementation report](reports/lora_gui_report.md). The included local smoke adapters verify training/loading only; they are not quality-trained releases. All original checkpoints remain unchanged.
+
+The corrected evaluator excludes padded targets: existing baseline/large/annotation checkpoints score approximately **67.49% / 68.43% / 70.06%** pitch accuracy on real targets. Older numbers below include padding and are retained as historical results, not directly comparable quality claims. New training uses masked loss. Save new training runs under `runs/`; do not overwrite original `models/`.
+
+
 An offline Windows desktop research prototype for iterative human–AI symbolic music composition. The user chooses a note; a conditional LSTM proposes a short MIDI continuation; the user listens, edits, or chooses the next note. The application is designed for co-creative iteration rather than autonomous full-song composition.
 
 ## At a glance
@@ -67,21 +86,21 @@ The GUI baseline architecture is 3 LSTM layers, hidden size 512, embedding size 
 After downloading the AAM MIDI archives and preprocessing, train the baseline to the GUI's expected path:
 
 ```powershell
-python -m ml.train --data ".\data\processed" --output "." `
+python -m ml.train --data ".\data\processed" --output ".\runs\midi_baseline" `
   --epochs 30 --batch-size 16 --sequence-length 128 `
   --hidden-size 512 --embedding-size 256 --layers 3 --dropout 0.25 `
   --learning-rate 0.0005 --weight-decay 0.01 --gradient-accumulation 1 `
   --model-name best_model_3x512
 ```
 
-The resulting checkpoint is `models/best_model_3x512.pt`. The held-out test split is reserved by the trainer; evaluate that checkpoint with:
+The resulting checkpoint is `runs/midi_baseline/models/best_model_3x512.pt`. The held-out test split is reserved by the trainer; evaluate that checkpoint with:
 
 ```powershell
 python -m ml.evaluate --data ".\data\processed" --models ".\models" `
   --checkpoint ".\models\best_model_3x512.pt" --output ".\test_outputs\baseline_3x512"
 ```
 
-To reproduce the experimental MIDI-only 4×768 run instead, use `train_full.ps1` (it writes checkpoints under `models/`, logs under `logs/`, and test outputs under `test_outputs/large_lstm/`). It does not replace the GUI's selected 3×512 default. The reported runs were:
+To reproduce the experimental MIDI-only 4×768 run instead, use `train_full.ps1` (it writes into a new isolated run folder). It does not replace the GUI's selected 3×512 default. The reported runs were:
 
 | Model | Validation loss | Test loss | Pitch accuracy | Duration MAE | Timing MAE |
 | --- | ---: | ---: | ---: | ---: | ---: |

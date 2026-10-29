@@ -49,10 +49,12 @@ def _write_midi(path: Path, events: list[Event], bpm: float) -> None:
 
 
 def generate(args) -> dict:
+    if args.output.exists() or args.output.with_suffix('.json').exists():
+        raise ValueError("Choose a new output filename; existing compositions are preserved.")
     root = Path(args.experiment)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     checkpoint_path = args.checkpoint or root / "models" / "aam_annotated_best.pt"
-    state = torch.load(checkpoint_path, map_location=device, weights_only=False)
+    state = torch.load(checkpoint_path, map_location=device, weights_only=True)
     cfg = state["config"]
     mapping = json.loads((root / "feature_mappings.json").read_text(encoding="utf-8"))
     inv = {name: {int(index): label for label, index in labels.items()}
@@ -160,6 +162,7 @@ def generate(args) -> dict:
             if relative_onset >= args.seconds:
                 break
             velocity = decode_velocity(velocity_token)
+            duration = min(duration, args.seconds-relative_onset)
             previous_end = onset + duration
             elapsed = onset
             event = Event(pitch, duration, velocity, relative_onset if not generated else onset - generated_abs[-1])

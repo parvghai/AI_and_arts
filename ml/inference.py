@@ -39,6 +39,8 @@ def autoregressive_generate(model: MusicLSTM, events: list[Event], target_note: 
     gap is raised to the previous note duration to avoid overlapping note-ons.
     """
     device = device or next(model.parameters()).device
+    if not __import__('math').isfinite(duration) or duration <= 0:
+        raise ValueError("Continuation duration must be positive and finite")
     rows = [encode_event(e) for e in events[-sequence_length:]] or [(60, 3, 4, 0)]
     generated: list[Event] = []
     elapsed = 0.0  # Local onset time of the next generated note.
@@ -79,7 +81,7 @@ def autoregressive_generate(model: MusicLSTM, events: list[Event], target_note: 
                 dt = .03
             if elapsed + dt >= duration:
                 break
-            duration_s = min(2.0, max(.08, decode_duration(dur_token)))
+            duration_s = min(2.0, max(.08, decode_duration(dur_token)), duration-elapsed-dt)
             velocity = min(127, max(1, decode_velocity(vel_token)))
             pitch = min(127, max(0, pitch))
             if recent_pitches and pitch == recent_pitches[-1]:
@@ -101,7 +103,7 @@ def autoregressive_generate(model: MusicLSTM, events: list[Event], target_note: 
             out, hidden = model(token[:, :, 0], token[:, :, 1], token[:, :, 2], token[:, :, 3],
                                 target, tempo, hidden)
             logits = {name: values[0, -1] for name, values in out.items()}
-    return generated or [Event(min(127, max(0, target_note)), .12, 80, 0.0)]
+    return generated or [Event(min(127, max(0, target_note)), min(.12,duration), 80, 0.0)]
 
 
 class LSTMGenerator:
@@ -110,7 +112,7 @@ class LSTMGenerator:
                    "LSTM 4x768 (experimental)": "best_model_4x768.pt"}
 
     def __init__(self, checkpoint: str | Path = "models/best_model_3x512.pt",
-                 temperature: float = .75) -> None:
+                 temperature: float = .75, adapter: str | Path | None = None) -> None:
         self.temperature = temperature
         self.top_k = 20
         self.top_p = .90
@@ -120,15 +122,18 @@ class LSTMGenerator:
         self.config: dict = {}
         self.load_error: str | None = None
         self.checkpoint = Path(checkpoint)
+        self.adapter_path = Path(adapter) if adapter else None
+        self.adapter_status = 'disabled'
         self.load_checkpoint(self.checkpoint)
 
     def load_checkpoint(self, checkpoint: str | Path) -> None:
         path = Path(checkpoint)
         self.checkpoint = path
+        self.adapter_status = 'disabled'
         try:
             if not path.exists():
                 raise FileNotFoundError(path)
-            state = torch.load(path, map_location=self.device, weights_only=False)
+            state = torch.load(path, map_location='cpu', weights_only=True)
             config = state.get("config", {})
             expected = {"best_model_3x512.pt": (3, 512, 256, .25),
                         "best_model_4x768.pt": (4, 768, 384, .30)}
@@ -144,10 +149,22 @@ class LSTMGenerator:
                               num_layers=config.get("layers", 3),
                               dropout=config.get("dropout", .25)).to(self.device)
             model.load_state_dict(state["model_state"]); model.eval()
+            self.adapter_status = 'disabled'
+            if self.adapter_path:
+                from ml.lora import apply_adapter
+                apply_adapter(model, self.adapter_path, path)
+                self.adapter_status = f'active: {self.adapter_path.name}'
             self.config, self.model, self.load_error = config, model, None
             self.top_k = int(config.get("top_k", 20)); self.top_p = float(config.get("top_p", .90))
         except Exception as exc:
             self.model = None; self.config = {}; self.load_error = f"Checkpoint unavailable: {exc}"
+            if self.adapter_path:
+                self.adapter_status = f'error: {exc}'
+
+    def set_adapter(self, adapter: str | Path | None) -> None:
+        """Reload the pristine base when toggling; never subtract or stack deltas."""
+        self.adapter_path = Path(adapter) if adapter else None
+        self.load_checkpoint(self.checkpoint)
 
     @property
     def loaded(self) -> bool:
@@ -160,24 +177,27 @@ class LSTMGenerator:
         context_length = self.config.get("sequence_length", 128)
         composition_end = float(composition.end_time)
         continuation_boundary = composition_end + human_note_duration(bpm)
+        factor = 100.0 / max(30, min(240, bpm))
         context = composition.events[-context_length:]
         prior = []
         previous_start = context[0].start if context else 0.0
         for index, event in enumerate(context):
             delta = 0.0 if index == 0 else max(0.0, event.start - previous_start)
-            prior.append(Event(event.pitch, max(.08,event.duration), event.velocity, delta))
+            prior.append(Event(event.pitch, max(.001,event.duration / factor), event.velocity, delta / factor))
             previous_start = event.start
         started = __import__("time").perf_counter()
-        notes = autoregressive_generate(self.model, prior, names[target_note], duration, bpm,
+        # Legacy checkpoints saw only 100 BPM. Rescale rhythm explicitly instead of
+        # feeding unsupported tempo conditioning into the learned projection.
+        notes = autoregressive_generate(self.model, prior, names[target_note], duration / factor, 100,
                                         self.temperature, self.device, context_length,
                                         self.top_k, self.top_p)
         self.last_latency_seconds = __import__("time").perf_counter() - started
         local_events = []
         cursor = 0.0
         for e in notes:
-            cursor += e.delta_time
+            cursor += e.delta_time * factor
             label = next((n for n,p in names.items() if p == e.pitch), f"{e.pitch}")
-            local_events.append(NoteEvent(e.pitch, cursor, max(.08, e.duration), e.velocity, "ai", label))
+            local_events.append(NoteEvent(e.pitch, cursor, min(e.duration * factor, duration-cursor), e.velocity, "ai", label))
         sanitized_local, diagnostics = sanitize_timeline(local_events, 0.0, ("ai",))
         absolute_events = [NoteEvent(e.pitch, continuation_boundary + e.start, e.duration,
                                      e.velocity, e.source, e.label) for e in sanitized_local]

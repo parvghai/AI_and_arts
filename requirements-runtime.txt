@@ -1,0 +1,2 @@
+# Minimal symbolic studio and MIDI import/export. Tkinter ships with Windows Python.
+mido>=1.3

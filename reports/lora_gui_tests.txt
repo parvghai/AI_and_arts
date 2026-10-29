@@ -1,0 +1,58 @@
+TIMELINE POST-APPEND {"valid": true, "overlap_detected": false, "counts": {"out_of_order": 0, "negative_durations": 0, "negative_delta_times": 0, "accidental_overlaps": 0, "duplicates": 0, "before_continuation_boundary": 0, "invalid_values": 0}, "issues": {"out_of_order": [], "negative_durations": [], "negative_delta_times": [], "accidental_overlaps": [], "duplicates": [], "before_continuation_boundary": [], "invalid_values": []}}
+test_original_controls_append_play_undo_and_export (test_classic_gui.ClassicTests.test_original_controls_append_play_undo_and_export) ... ok
+test_upstream_visual_methods_unchanged (test_classic_gui.ClassicTests.test_upstream_visual_methods_unchanged) ... ok
+test_bad_session_does_not_mutate_document (test_core.CoreTests.test_bad_session_does_not_mutate_document) ... ok
+test_fallback_grid (test_core.CoreTests.test_fallback_grid) ... ok
+test_midi_polyphony_and_duration_roundtrip (test_core.CoreTests.test_midi_polyphony_and_duration_roundtrip) ... ok
+test_note_off_precedes_retrigger (test_core.CoreTests.test_note_off_precedes_retrigger) ... ok
+test_parser_orphan_closes_at_track_end (test_core.CoreTests.test_parser_orphan_closes_at_track_end) ... ok
+test_polyphony_is_valid_when_requested (test_core.CoreTests.test_polyphony_is_valid_when_requested) ... ok
+test_same_pitch_overlap_has_one_matching_off (test_core.CoreTests.test_same_pitch_overlap_has_one_matching_off) ... ok
+test_session_roundtrip_edit_undo (test_core.CoreTests.test_session_roundtrip_edit_undo) ... ok
+test_type2_rejected (test_core.CoreTests.test_type2_rejected) ... ok
+test_validator_rejects_bad_values (test_core.CoreTests.test_validator_rejects_bad_values) ... ok
+test_all_objectives_within_duration (test_generation.GenerationTests.test_all_objectives_within_duration) ... ok
+test_chords_preserve_polyphony_rhythm_uses_drums (test_generation.GenerationTests.test_chords_preserve_polyphony_rhythm_uses_drums) ... ok
+test_disabled_features_ignore_reference (test_generation.GenerationTests.test_disabled_features_ignore_reference) ... ok
+test_harmony_controls_change_pitch_distribution (test_generation.GenerationTests.test_harmony_controls_change_pitch_distribution) ... ok
+test_invalid_settings (test_generation.GenerationTests.test_invalid_settings) ... ok
+test_reproducibility_and_candidate_diversity (test_generation.GenerationTests.test_reproducibility_and_candidate_diversity) ... ok
+test_rhythm_energy_contour_controls_are_effective (test_generation.GenerationTests.test_rhythm_energy_contour_controls_are_effective) ... ok
+test_zero_reference_influence_exactly_ignores_reference (test_generation.GenerationTests.test_zero_reference_influence_exactly_ignores_reference) ... ok
+test_classic_note_click_appends_plays_and_undoes (test_gui.GUITests.test_classic_note_click_appends_plays_and_undoes) ... ok
+test_generate_edit_accept_save_open_undo (test_gui.GUITests.test_generate_edit_accept_save_open_undo) ... ok
+test_no_torch_model_selection_falls_back (test_gui.GUITests.test_no_torch_model_selection_falls_back) ... ok
+test_reference_import_generate_reject_and_failure_keeps_reference (test_gui.GUITests.test_reference_import_generate_reject_and_failure_keeps_reference) ... ok
+test_selected_range_regeneration_is_uncommitted_and_undoable (test_gui.GUITests.test_selected_range_regeneration_is_uncommitted_and_undoable) ... ok
+test_cuda_training_process_exits_cleanly (test_lora.LoRATests.test_cuda_training_process_exits_cleanly) ... ok
+test_evaluator_accepts_adapter_and_records_hash (test_lora.LoRATests.test_evaluator_accepts_adapter_and_records_hash) ... ok
+test_invalid_options_and_no_overwrite (test_lora.LoRATests.test_invalid_options_and_no_overwrite) ... ok
+test_learning_freezing_save_merge_and_generator (test_lora.LoRATests.test_learning_freezing_save_merge_and_generator) ... ok
+test_reject_wrong_base_and_corrupt_weights_without_mutation (test_lora.LoRATests.test_reject_wrong_base_and_corrupt_weights_without_mutation) ... ok
+test_zero_initialization_matches_base (test_lora.LoRATests.test_zero_initialization_matches_base) ... ok
+test_close_settings_turns_off_and_busy_controls_are_disabled (test_lora_gui.LoRAGUITests.test_close_settings_turns_off_and_busy_controls_are_disabled) ... ok
+test_enable_disable_restores_exact_base_weights_for_both_models (test_lora_gui.LoRAGUITests.test_enable_disable_restores_exact_base_weights_for_both_models) ... ok
+test_generation_appends_and_plays_with_lora_enabled (test_lora_gui.LoRAGUITests.test_generation_appends_and_plays_with_lora_enabled) ... ok
+test_launch_argument_is_only_a_hint (test_lora_gui.LoRAGUITests.test_launch_argument_is_only_a_hint) ... ok
+test_lora_inference_error_does_not_use_symbolic_fallback (test_lora_gui.LoRAGUITests.test_lora_inference_error_does_not_use_symbolic_fallback) ... ok
+test_missing_and_corrupt_adapters_never_silently_fall_back (test_lora_gui.LoRAGUITests.test_missing_and_corrupt_adapters_never_silently_fall_back) ... ok
+test_missing_selected_file_and_incompatible_browse (test_lora_gui.LoRAGUITests.test_missing_selected_file_and_incompatible_browse) ... ok
+test_starts_off_even_with_environment_and_hint (test_lora_gui.LoRAGUITests.test_starts_off_even_with_environment_and_hint) ... ok
+test_switch_requires_new_compatible_selection_and_blocks_generation (test_lora_gui.LoRAGUITests.test_switch_requires_new_compatible_selection_and_blocks_generation) ... ok
+test_real_checkpoints_off_on_off_with_seeded_inference (test_lora_gui.RealModelToggleTests.test_real_checkpoints_off_on_off_with_seeded_inference) ... ok
+test_real_models_evaluate_with_explicit_adapter_only (test_lora_gui.RealModelToggleTests.test_real_models_evaluate_with_explicit_adapter_only) ... ok
+test_annotated_mask_fixture (test_ml.MLTests.test_annotated_mask_fixture) ... ok
+test_composition_group_splits (test_ml.MLTests.test_composition_group_splits) ... ok
+test_local_frozen_checkpoints_duration (test_ml.MLTests.test_local_frozen_checkpoints_duration) ... ok
+test_loss_ignores_padded_values_and_gradients (test_ml.MLTests.test_loss_ignores_padded_values_and_gradients) ... ok
+test_missing_checkpoint_is_safe (test_ml.MLTests.test_missing_checkpoint_is_safe) ... ok
+test_padding_mask_real_targets (test_ml.MLTests.test_padding_mask_real_targets) ... ok
+test_long_input_is_bounded (test_reference.ReferenceTests.test_long_input_is_bounded) ... ok
+test_real_mp3_decode_and_guidance (test_reference.ReferenceTests.test_real_mp3_decode_and_guidance) ... ok
+test_silence_corrupt_unsupported_and_size (test_reference.ReferenceTests.test_silence_corrupt_unsupported_and_size) ... ok
+test_wav_analysis_and_cache (test_reference.ReferenceTests.test_wav_analysis_and_cache) ... ok
+
+----------------------------------------------------------------------
+Ran 52 tests in 12.723s
+
+OK

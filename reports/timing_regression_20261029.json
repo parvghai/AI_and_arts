@@ -1,0 +1,1483 @@
+{
+  "seed": 41027,
+  "target": "A",
+  "bpm": 100,
+  "starting_composition": [
+    {
+      "pitch": 60,
+      "start": 0.0,
+      "duration": 0.18,
+      "velocity": 96,
+      "source": "human",
+      "label": "C",
+      "channel": 0,
+      "program": 0
+    },
+    {
+      "pitch": 62,
+      "start": 0.22,
+      "duration": 0.16,
+      "velocity": 78,
+      "source": "ai",
+      "label": "D",
+      "channel": 0,
+      "program": 0
+    },
+    {
+      "pitch": 64,
+      "start": 0.42,
+      "duration": 0.18,
+      "velocity": 82,
+      "source": "ai",
+      "label": "E",
+      "channel": 0,
+      "program": 0
+    },
+    {
+      "pitch": 67,
+      "start": 0.64,
+      "duration": 0.18,
+      "velocity": 86,
+      "source": "ai",
+      "label": "G",
+      "channel": 0,
+      "program": 0
+    }
+  ],
+  "runs": [
+    {
+      "model": "3x512",
+      "checkpoint": "models\\best_model_3x512.pt",
+      "architecture": [
+        3,
+        512,
+        256,
+        0.25
+      ],
+      "duration_seconds": 0.5,
+      "latency_seconds": 0.27925339998910204,
+      "composition_end": 1.54,
+      "continuation_boundary": 1.04,
+      "events": [
+        {
+          "pitch": 60,
+          "start": 1.19,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 1.34,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 1.4900000000000002,
+          "duration": 0.04999999999999993,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        }
+      ],
+      "timeline_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "within_duration_budget": true,
+      "interaction_after_append_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "absolute_composition_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "inference_diagnostics": {
+        "composition_end": 0.8200000000000001,
+        "human_input_end": 1.04,
+        "continuation_boundary": 1.04,
+        "duration_seconds": 0.5,
+        "local_events_before_sanitization": [
+          {
+            "start": 0.15,
+            "end": 0.3
+          },
+          {
+            "start": 0.3,
+            "end": 0.45
+          },
+          {
+            "start": 0.45,
+            "end": 0.5
+          }
+        ],
+        "absolute_events_after_sanitization": [
+          {
+            "start": 1.19,
+            "end": 1.34
+          },
+          {
+            "start": 1.34,
+            "end": 1.49
+          },
+          {
+            "start": 1.49,
+            "end": 1.54
+          }
+        ],
+        "overlap_detected": false,
+        "events_before_sanitization": 3,
+        "events_after_sanitization": 3,
+        "local_validation_before": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        },
+        "absolute_validation_after": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        }
+      }
+    },
+    {
+      "model": "3x512",
+      "checkpoint": "models\\best_model_3x512.pt",
+      "architecture": [
+        3,
+        512,
+        256,
+        0.25
+      ],
+      "duration_seconds": 1.0,
+      "latency_seconds": 0.019136000017169863,
+      "composition_end": 2.04,
+      "continuation_boundary": 1.04,
+      "events": [
+        {
+          "pitch": 60,
+          "start": 1.19,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 1.34,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 1.4900000000000002,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 60,
+          "start": 1.6400000000000001,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 1.79,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 1.9400000000000002,
+          "duration": 0.09999999999999987,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        }
+      ],
+      "timeline_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "within_duration_budget": true,
+      "interaction_after_append_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "absolute_composition_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "inference_diagnostics": {
+        "composition_end": 0.8200000000000001,
+        "human_input_end": 1.04,
+        "continuation_boundary": 1.04,
+        "duration_seconds": 1.0,
+        "local_events_before_sanitization": [
+          {
+            "start": 0.15,
+            "end": 0.3
+          },
+          {
+            "start": 0.3,
+            "end": 0.45
+          },
+          {
+            "start": 0.45,
+            "end": 0.6
+          },
+          {
+            "start": 0.6,
+            "end": 0.75
+          },
+          {
+            "start": 0.75,
+            "end": 0.9
+          },
+          {
+            "start": 0.9,
+            "end": 1.0
+          }
+        ],
+        "absolute_events_after_sanitization": [
+          {
+            "start": 1.19,
+            "end": 1.34
+          },
+          {
+            "start": 1.34,
+            "end": 1.49
+          },
+          {
+            "start": 1.49,
+            "end": 1.64
+          },
+          {
+            "start": 1.64,
+            "end": 1.79
+          },
+          {
+            "start": 1.79,
+            "end": 1.94
+          },
+          {
+            "start": 1.94,
+            "end": 2.04
+          }
+        ],
+        "overlap_detected": false,
+        "events_before_sanitization": 6,
+        "events_after_sanitization": 6,
+        "local_validation_before": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        },
+        "absolute_validation_after": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        }
+      }
+    },
+    {
+      "model": "3x512",
+      "checkpoint": "models\\best_model_3x512.pt",
+      "architecture": [
+        3,
+        512,
+        256,
+        0.25
+      ],
+      "duration_seconds": 2.0,
+      "latency_seconds": 0.039220400038175285,
+      "composition_end": 3.04,
+      "continuation_boundary": 1.04,
+      "events": [
+        {
+          "pitch": 60,
+          "start": 1.19,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 1.34,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 1.4900000000000002,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 60,
+          "start": 1.6400000000000001,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 1.79,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 1.9400000000000002,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 60,
+          "start": 2.0900000000000003,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 2.24,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 2.39,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 60,
+          "start": 2.54,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 2.69,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 2.84,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 2.9899999999999998,
+          "duration": 0.050000000000000155,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        }
+      ],
+      "timeline_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "within_duration_budget": true,
+      "interaction_after_append_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "absolute_composition_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "inference_diagnostics": {
+        "composition_end": 0.8200000000000001,
+        "human_input_end": 1.04,
+        "continuation_boundary": 1.04,
+        "duration_seconds": 2.0,
+        "local_events_before_sanitization": [
+          {
+            "start": 0.15,
+            "end": 0.3
+          },
+          {
+            "start": 0.3,
+            "end": 0.45
+          },
+          {
+            "start": 0.45,
+            "end": 0.6
+          },
+          {
+            "start": 0.6,
+            "end": 0.75
+          },
+          {
+            "start": 0.75,
+            "end": 0.9
+          },
+          {
+            "start": 0.9,
+            "end": 1.05
+          },
+          {
+            "start": 1.05,
+            "end": 1.2
+          },
+          {
+            "start": 1.2,
+            "end": 1.35
+          },
+          {
+            "start": 1.35,
+            "end": 1.5
+          },
+          {
+            "start": 1.5,
+            "end": 1.65
+          },
+          {
+            "start": 1.65,
+            "end": 1.8
+          },
+          {
+            "start": 1.8,
+            "end": 1.95
+          },
+          {
+            "start": 1.95,
+            "end": 2.0
+          }
+        ],
+        "absolute_events_after_sanitization": [
+          {
+            "start": 1.19,
+            "end": 1.34
+          },
+          {
+            "start": 1.34,
+            "end": 1.49
+          },
+          {
+            "start": 1.49,
+            "end": 1.64
+          },
+          {
+            "start": 1.64,
+            "end": 1.79
+          },
+          {
+            "start": 1.79,
+            "end": 1.94
+          },
+          {
+            "start": 1.94,
+            "end": 2.09
+          },
+          {
+            "start": 2.09,
+            "end": 2.24
+          },
+          {
+            "start": 2.24,
+            "end": 2.39
+          },
+          {
+            "start": 2.39,
+            "end": 2.54
+          },
+          {
+            "start": 2.54,
+            "end": 2.69
+          },
+          {
+            "start": 2.69,
+            "end": 2.84
+          },
+          {
+            "start": 2.84,
+            "end": 2.99
+          },
+          {
+            "start": 2.99,
+            "end": 3.04
+          }
+        ],
+        "overlap_detected": false,
+        "events_before_sanitization": 13,
+        "events_after_sanitization": 13,
+        "local_validation_before": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        },
+        "absolute_validation_after": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        }
+      }
+    },
+    {
+      "model": "4x768",
+      "checkpoint": "models\\best_model_4x768.pt",
+      "architecture": [
+        4,
+        768,
+        384,
+        0.3
+      ],
+      "duration_seconds": 0.5,
+      "latency_seconds": 0.009061099961400032,
+      "composition_end": 1.4649999999999999,
+      "continuation_boundary": 1.04,
+      "events": [
+        {
+          "pitch": 60,
+          "start": 1.315,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        }
+      ],
+      "timeline_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "within_duration_budget": true,
+      "interaction_after_append_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "absolute_composition_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "inference_diagnostics": {
+        "composition_end": 0.8200000000000001,
+        "human_input_end": 1.04,
+        "continuation_boundary": 1.04,
+        "duration_seconds": 0.5,
+        "local_events_before_sanitization": [
+          {
+            "start": 0.275,
+            "end": 0.425
+          }
+        ],
+        "absolute_events_after_sanitization": [
+          {
+            "start": 1.315,
+            "end": 1.465
+          }
+        ],
+        "overlap_detected": false,
+        "events_before_sanitization": 1,
+        "events_after_sanitization": 1,
+        "local_validation_before": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        },
+        "absolute_validation_after": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        }
+      }
+    },
+    {
+      "model": "4x768",
+      "checkpoint": "models\\best_model_4x768.pt",
+      "architecture": [
+        4,
+        768,
+        384,
+        0.3
+      ],
+      "duration_seconds": 1.0,
+      "latency_seconds": 0.010340899985749274,
+      "composition_end": 2.015,
+      "continuation_boundary": 1.04,
+      "events": [
+        {
+          "pitch": 60,
+          "start": 1.315,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 1.59,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 1.8650000000000002,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        }
+      ],
+      "timeline_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "within_duration_budget": true,
+      "interaction_after_append_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "absolute_composition_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "inference_diagnostics": {
+        "composition_end": 0.8200000000000001,
+        "human_input_end": 1.04,
+        "continuation_boundary": 1.04,
+        "duration_seconds": 1.0,
+        "local_events_before_sanitization": [
+          {
+            "start": 0.275,
+            "end": 0.425
+          },
+          {
+            "start": 0.55,
+            "end": 0.7
+          },
+          {
+            "start": 0.825,
+            "end": 0.975
+          }
+        ],
+        "absolute_events_after_sanitization": [
+          {
+            "start": 1.315,
+            "end": 1.465
+          },
+          {
+            "start": 1.59,
+            "end": 1.74
+          },
+          {
+            "start": 1.865,
+            "end": 2.015
+          }
+        ],
+        "overlap_detected": false,
+        "events_before_sanitization": 3,
+        "events_after_sanitization": 3,
+        "local_validation_before": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        },
+        "absolute_validation_after": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        }
+      }
+    },
+    {
+      "model": "4x768",
+      "checkpoint": "models\\best_model_4x768.pt",
+      "architecture": [
+        4,
+        768,
+        384,
+        0.3
+      ],
+      "duration_seconds": 2.0,
+      "latency_seconds": 0.020879700023215264,
+      "composition_end": 3.04,
+      "continuation_boundary": 1.04,
+      "events": [
+        {
+          "pitch": 60,
+          "start": 1.315,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 1.59,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 1.8650000000000002,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 2.14,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 64,
+          "start": 2.415,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "E",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 69,
+          "start": 2.69,
+          "duration": 0.15,
+          "velocity": 56,
+          "source": "ai",
+          "label": "A",
+          "channel": 0,
+          "program": 0
+        },
+        {
+          "pitch": 60,
+          "start": 2.965,
+          "duration": 0.07500000000000007,
+          "velocity": 56,
+          "source": "ai",
+          "label": "C",
+          "channel": 0,
+          "program": 0
+        }
+      ],
+      "timeline_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "within_duration_budget": true,
+      "interaction_after_append_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "absolute_composition_validation": {
+        "valid": true,
+        "overlap_detected": false,
+        "counts": {
+          "out_of_order": 0,
+          "negative_durations": 0,
+          "negative_delta_times": 0,
+          "accidental_overlaps": 0,
+          "duplicates": 0,
+          "before_continuation_boundary": 0,
+          "invalid_values": 0
+        },
+        "issues": {
+          "out_of_order": [],
+          "negative_durations": [],
+          "negative_delta_times": [],
+          "accidental_overlaps": [],
+          "duplicates": [],
+          "before_continuation_boundary": [],
+          "invalid_values": []
+        }
+      },
+      "inference_diagnostics": {
+        "composition_end": 0.8200000000000001,
+        "human_input_end": 1.04,
+        "continuation_boundary": 1.04,
+        "duration_seconds": 2.0,
+        "local_events_before_sanitization": [
+          {
+            "start": 0.275,
+            "end": 0.425
+          },
+          {
+            "start": 0.55,
+            "end": 0.7
+          },
+          {
+            "start": 0.825,
+            "end": 0.975
+          },
+          {
+            "start": 1.1,
+            "end": 1.25
+          },
+          {
+            "start": 1.375,
+            "end": 1.525
+          },
+          {
+            "start": 1.65,
+            "end": 1.8
+          },
+          {
+            "start": 1.925,
+            "end": 2.0
+          }
+        ],
+        "absolute_events_after_sanitization": [
+          {
+            "start": 1.315,
+            "end": 1.465
+          },
+          {
+            "start": 1.59,
+            "end": 1.74
+          },
+          {
+            "start": 1.865,
+            "end": 2.015
+          },
+          {
+            "start": 2.14,
+            "end": 2.29
+          },
+          {
+            "start": 2.415,
+            "end": 2.565
+          },
+          {
+            "start": 2.69,
+            "end": 2.84
+          },
+          {
+            "start": 2.965,
+            "end": 3.04
+          }
+        ],
+        "overlap_detected": false,
+        "events_before_sanitization": 7,
+        "events_after_sanitization": 7,
+        "local_validation_before": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        },
+        "absolute_validation_after": {
+          "valid": true,
+          "overlap_detected": false,
+          "counts": {
+            "out_of_order": 0,
+            "negative_durations": 0,
+            "negative_delta_times": 0,
+            "accidental_overlaps": 0,
+            "duplicates": 0,
+            "before_continuation_boundary": 0,
+            "invalid_values": 0
+          },
+          "issues": {
+            "out_of_order": [],
+            "negative_durations": [],
+            "negative_delta_times": [],
+            "accidental_overlaps": [],
+            "duplicates": [],
+            "before_continuation_boundary": [],
+            "invalid_values": []
+          }
+        }
+      }
+    }
+  ]
+}

@@ -14,18 +14,15 @@ from torch.utils.data import DataLoader, Subset
 
 from ml.aam_annotated.dataset import AAMWindowDataset
 from ml.aam_annotated.model import AAMAnnotatedMusicLSTM
+from ml.losses import event_loss
 
 
 def _batch_loss(model, batch, device):
-    cat, numeric, targets, timing, target_note = [value.to(device) for value in batch]
+    cat, numeric, targets, timing, target_note, mask, _ = [value.to(device) for value in batch]
     outputs, _ = model(cat, numeric, target_note)
-    pitch = nn.functional.cross_entropy(outputs["pitch"].reshape(-1, 128), targets[:, :, 0].reshape(-1))
-    duration = nn.functional.cross_entropy(outputs["duration"].reshape(-1, 16), targets[:, :, 1].reshape(-1))
-    velocity = nn.functional.cross_entropy(outputs["velocity"].reshape(-1, 8), targets[:, :, 2].reshape(-1))
-    timing = nn.functional.smooth_l1_loss(outputs["timing"], timing)
-    return pitch + duration + .5 * velocity + .5 * timing, {
-        "pitch": float(pitch.detach()), "duration": float(duration.detach()),
-        "velocity": float(velocity.detach()), "timing": float(timing.detach())}
+    total, parts = event_loss(outputs, targets, timing, mask)
+    return total, {name: float(value.detach()) for name, value in parts.items()}
+
 
 
 def _load_vocab(root: Path):
@@ -45,7 +42,7 @@ def smoke(root: Path, args) -> None:
     val_loader = DataLoader(Subset(val_ds, range(min(batch_size, len(val_ds)))),
                             batch_size=min(batch_size, len(val_ds)), shuffle=False)
     train_batch, val_batch = next(iter(train_loader)), next(iter(val_loader))
-    cat, numeric, targets, timing, target_note = train_batch
+    cat, numeric, targets, timing, target_note, mask, _ = train_batch
     expected = (batch_size, sequence_length, 6)
     if tuple(cat.shape) != expected or tuple(numeric.shape) != (batch_size, sequence_length, 7):
         raise RuntimeError(f"Unexpected input tensor shapes: cat={tuple(cat.shape)}, numeric={tuple(numeric.shape)}")
@@ -97,7 +94,8 @@ def smoke(root: Path, args) -> None:
     if final_train_loss >= initial_train_loss:
         raise RuntimeError(f"Smoke overfit check did not reduce loss ({initial_train_loss:.4f} -> {final_train_loss:.4f}).")
 
-    exp_models = root / "smoke" / "models"
+    root = args.output / "smoke"
+    exp_models = root / "models"
     logs = root / "logs"
     exp_models.mkdir(parents=True, exist_ok=True); logs.mkdir(parents=True, exist_ok=True)
     config = {"mode": "smoke_only", "layers": 4, "hidden_size": 768, "embedding_size": 384,
@@ -113,7 +111,7 @@ def smoke(root: Path, args) -> None:
                 "smoke_history": history, "initial_train_loss": initial_train_loss,
                 "final_train_loss": final_train_loss, "validation_loss": validation_loss}, checkpoint)
     restored = AAMAnnotatedMusicLSTM(vocab_sizes, 384, 768, 4, .30).to(device)
-    saved = torch.load(checkpoint, map_location=device, weights_only=False)
+    saved = torch.load(checkpoint, map_location=device, weights_only=True)
     restored.load_state_dict(saved["model_state"])
     restored.eval()
     with torch.no_grad():
@@ -163,9 +161,13 @@ def full_train(root: Path, args) -> None:
     scaler = torch.amp.GradScaler("cuda", enabled=use_cuda)
     train_loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True, num_workers=0, pin_memory=use_cuda)
     val_loader = DataLoader(val_ds, batch_size=args.batch_size, shuffle=False, num_workers=0, pin_memory=use_cuda)
+    data_root = root
+    root = args.output
+    if (root / "models").exists():
+        raise SystemExit("Choose a new --output; existing checkpoints are preserved.")
     model_dir, logs_dir = root / "models", root / "logs"
     model_dir.mkdir(parents=True, exist_ok=True); logs_dir.mkdir(parents=True, exist_ok=True)
-    config = {"mode": "full", "layers": 4, "hidden_size": 768, "embedding_size": 384,
+    config = {"mode": "full", "evaluation_protocol": "masked-v1", "layers": 4, "hidden_size": 768, "embedding_size": 384,
               "dropout": .30, "sequence_length": sequence_length, "batch_size": args.batch_size,
               "learning_rate": args.learning_rate, "seed": args.seed,
               "vocab_sizes": vocab_sizes, "categorical_features": mapping["categorical_features"],
@@ -186,7 +188,7 @@ def full_train(root: Path, args) -> None:
     validation_log = (logs_dir / "validation.jsonl").open("w", encoding="utf-8")
     try:
         for epoch in range(1, args.epochs + 1):
-            model.train(); total = torch.zeros((), device=device)
+            model.train(); total = torch.zeros((), device=device); train_count = 0
             for batch in train_loader:
                 batch = [v.to(device, non_blocking=use_cuda) for v in batch]
                 optimizer.zero_grad(set_to_none=True)
@@ -196,17 +198,18 @@ def full_train(root: Path, args) -> None:
                     raise RuntimeError(f"Non-finite training loss at epoch {epoch}")
                 scaler.scale(loss).backward(); scaler.unscale_(optimizer)
                 nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-                scaler.step(optimizer); scaler.update(); total += loss.detach()
-            train_loss = float(total.cpu()) / max(1, len(train_loader))
-            model.eval(); vtotal = torch.zeros((), device=device)
+                scaler.step(optimizer); scaler.update()
+                count = int(batch[5].sum()); train_count += count; total += loss.detach() * count
+            train_loss = float(total.cpu()) / max(1, train_count)
+            model.eval(); vtotal = torch.zeros((), device=device); validation_count = 0
             with torch.no_grad():
                 for batch in val_loader:
                     batch = [v.to(device, non_blocking=use_cuda) for v in batch]
                     vloss, _ = _batch_loss(model, batch, device)
                     if not torch.isfinite(vloss):
                         raise RuntimeError(f"Non-finite validation loss at epoch {epoch}")
-                    vtotal += vloss
-            val_loss = float(vtotal.cpu()) / max(1, len(val_loader)); scheduler.step(val_loss)
+                    count = int(batch[5].sum()); validation_count += count; vtotal += vloss * count
+            val_loss = float(vtotal.cpu()) / max(1, validation_count); scheduler.step(val_loss)
             epoch_row = {"epoch": epoch, "train_loss": train_loss,
                          "validation_loss": val_loss, "learning_rate": optimizer.param_groups[0]["lr"]}
             train_log.write(json.dumps(epoch_row) + "\n"); train_log.flush()
@@ -236,7 +239,7 @@ def full_train(root: Path, args) -> None:
         raise RuntimeError("Training ended without a best-validation checkpoint.")
     print(f"Best validation checkpoint: epoch {best_epoch}, loss={best:.4f}")
     from ml.aam_annotated.evaluate import evaluate_checkpoint
-    evaluate_checkpoint(root, model_dir / "aam_annotated_best.pt", args.evaluation_batch_size)
+    evaluate_checkpoint(data_root, model_dir / "aam_annotated_best.pt", args.evaluation_batch_size, root / "reports/evaluation_masked.json")
 
 
 def main() -> None:
@@ -245,6 +248,7 @@ def main() -> None:
     parser.add_argument("--mode", choices=("smoke", "full"), default="smoke",
                         help="Defaults to the bounded smoke test; full mode is explicit.")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--output", type=Path, default=Path("runs/aam_annotated_masked"))
     parser.add_argument("--smoke-steps", type=int, default=12)
     parser.add_argument("--smoke-batch-size", type=int, default=2)
     parser.add_argument("--smoke-learning-rate", type=float, default=.001)

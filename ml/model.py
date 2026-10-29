@@ -40,7 +40,14 @@ class MusicLSTM(nn.Module):
              + self.velocity_embedding(velocity) + self.timing_embedding(timing)
              + self.target_embedding(target_note.long()).unsqueeze(1)
              + self.tempo_projection(tempo_norm))
-        out, hidden = self.lstm(self.dropout(x), hidden)
+        # Recomputed low-rank recurrent weights must not be cached/flattened by
+        # cuDNN's fused RNN training backend. Merged inference uses the fast path.
+        from torch.nn.utils import parametrize
+        if parametrize.is_parametrized(self.lstm) and x.is_cuda:
+            with torch.backends.cudnn.flags(enabled=False):
+                out, hidden = self.lstm(self.dropout(x), hidden)
+        else:
+            out, hidden = self.lstm(self.dropout(x), hidden)
         out = self.dropout(out)
         return {"pitch": self.pitch_head(out), "duration": self.duration_head(out),
                 "velocity": self.velocity_head(out), "timing": self.timing_head(out).squeeze(-1)}, hidden

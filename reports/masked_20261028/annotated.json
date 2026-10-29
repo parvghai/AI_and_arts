@@ -1,0 +1,35 @@
+{
+  "protocol": "masked-v1",
+  "checkpoint": "experiments\\aam_annotated\\models\\aam_annotated_best.pt",
+  "best_epoch": 12,
+  "checkpoint_sha256": "84463c61bfe37f36cbc0c11ae8c6adb6513e7c3e966394b2ab84b225dcb1bb33",
+  "mapping_sha256": "bc5e7daca265da14c7e75a554bfc750e6c90f145ea2367cd6a5c99fe464d351e",
+  "source_level_test_groups": 300,
+  "test_windows": 4130,
+  "device": "cuda",
+  "real_targets": {
+    "target_events": 722173,
+    "loss": 0.9931772135969582,
+    "pitch_loss": 0.7908150178783339,
+    "duration_loss": 0.20156275632005333,
+    "velocity_loss": 5.893751329343342e-09,
+    "timing_loss": 0.0016067754672372651,
+    "pitch_accuracy": 0.7005800584195547,
+    "duration_mae_seconds": 0.05301084395652089,
+    "velocity_mae": 0.0,
+    "timing_mae_seconds": 0.09385198176384828
+  },
+  "legacy_including_padding": {
+    "target_events": 1057280,
+    "loss": 0.6829762329200856,
+    "pitch_loss": 0.5436842652845036,
+    "duration_loss": 0.1384067193647851,
+    "velocity_loss": 2.0782249025802057e-09,
+    "timing_loss": 0.0018091007627402465,
+    "pitch_accuracy": 0.7946835275423729,
+    "duration_mae_seconds": 0.03633678891305918,
+    "velocity_mae": 0.0,
+    "timing_mae_seconds": 0.11066871589234609
+  },
+  "note": "Teacher forced, gold endpoint; real timing target decoded with target tempo. No retraining."
+}

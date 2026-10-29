@@ -12,6 +12,7 @@ from torch.utils.data import DataLoader
 from ml.dataset import EventWindowDataset, split_files, count_event_rows, count_windows
 from ml.model import MusicLSTM
 from ml.preprocessing import preprocess_directory
+from ml.losses import event_loss
 
 
 def main() -> None:
@@ -26,8 +27,10 @@ def main() -> None:
     p.add_argument("--top-k", type=int, default=20); p.add_argument("--top-p", type=float, default=.90)
     p.add_argument("--model-name", default=None, help="Checkpoint stem, e.g. best_model_4x768")
     p.add_argument("--temperature", type=float, default=.8); p.add_argument("--seed", type=int, default=42)
-    p.add_argument("--output", type=Path, default=Path("."))
+    p.add_argument("--output", type=Path, default=Path("runs/midi_masked"))
     args = p.parse_args()
+    if (args.output / "models").exists():
+        raise SystemExit("Choose a new --output directory; existing checkpoints are preserved.")
     random.seed(args.seed); torch.manual_seed(args.seed)
     cuda = torch.cuda.is_available()
     device = torch.device("cuda" if cuda else "cpu")
@@ -68,7 +71,7 @@ def main() -> None:
     print(f"  MIDI: {dataset_summary['midi_files_discovered']} discovered, {len(files)} valid, {dataset_summary['invalid_midi_files']} invalid")
     print(f"  Split files: train={len(train_files)}, validation={len(val_files)}, test={len(test_files)}")
     print(f"  Events: {event_total:,}; windows/sequences: train={sequence_counts['train']:,}, validation={sequence_counts['validation']:,}, test={sequence_counts['test']:,}")
-    print(f"  Vocabulary: {dataset_summary['vocabulary_sizes']}; processed size≈{dataset_bytes/1024/1024:.1f} MiB")
+    print(f"  Vocabulary: {dataset_summary['vocabulary_sizes']}; processed sizeâ‰ˆ{dataset_bytes/1024/1024:.1f} MiB")
     # Pick the longest context that fits a conservative activation-memory estimate.
     if cuda and args.sequence_length == 256:
         free_bytes, _ = torch.cuda.mem_get_info()
@@ -109,18 +112,16 @@ def main() -> None:
     def epoch(loader: DataLoader, train: bool) -> float:
         model.train(train); total = seen = 0
         optimizer.zero_grad(set_to_none=True)
-        for batch_index, (x, y, target, tempo) in enumerate(loader):
+        for batch_index, (x, y, target, tempo, mask) in enumerate(loader):
             x, y = x.to(device, non_blocking=cuda), y.to(device, non_blocking=cuda)
             target, tempo = target.to(device, non_blocking=cuda), tempo.to(device, non_blocking=cuda)
+            mask = mask.to(device)
             kwargs = dict(pitch=x[:,:,0], duration=x[:,:,1], velocity=x[:,:,2], timing=x[:,:,3],
                           target_note=target, tempo=tempo)
             with torch.set_grad_enabled(train):
                 with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp_enabled):
                     out, _ = model(**kwargs)
-                    losses = (weights["pitch"]*ce(out["pitch"].reshape(-1,128), y[:,:,0].reshape(-1))
-                              + weights["duration"]*ce(out["duration"].reshape(-1,16), y[:,:,1].reshape(-1))
-                              + weights["velocity"]*ce(out["velocity"].reshape(-1,8), y[:,:,2].reshape(-1))
-                              + weights["timing"]*nn.functional.smooth_l1_loss(out["timing"], y[:,:,3].float()/7.5))
+                    losses, _ = event_loss(out, y[:, :, :3], y[:, :, 3].float()/7.5, mask)
                 if train:
                     scaler.scale(losses / args.gradient_accumulation).backward()
                     if (batch_index + 1) % args.gradient_accumulation == 0 or batch_index + 1 == len(loader):
@@ -128,7 +129,8 @@ def main() -> None:
                         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                         scaler.step(optimizer); scaler.update()
                         optimizer.zero_grad(set_to_none=True)
-            total += float(losses.detach()) * len(x); seen += len(x)
+            count = int(mask.sum())
+            total += float(losses.detach()) * count; seen += count
         return total / max(1, seen)
 
     models = args.output / "models"; logs = args.output / "logs"
@@ -137,6 +139,7 @@ def main() -> None:
     config = vars(args).copy(); config["data"] = str(args.data); config["output"] = str(args.output)
     config["top_k"] = args.top_k; config["top_p"] = args.top_p
     config.update({"vocab_size":128,"duration_vocab":16,"velocity_vocab":8,"timing_vocab":16,
+                   "evaluation_protocol":"masked-v1", "tempo_conditioning":"constant_100",
                    "temperature":args.temperature,"device":str(device),"loss_weights":weights,
                    "target_conditioning":"future_window_final_pitch"})
     (models / "model_config.json").write_text(json.dumps(config, indent=2), encoding="utf-8")
@@ -147,7 +150,7 @@ def main() -> None:
     latest_path = models / f"latest_model_{args.layers}x{args.hidden_size}.pt"
     legacy_best = models / "best_model.pt"
     if args.layers == 4 and args.hidden_size == 768 and legacy_best.exists():
-        legacy_state = torch.load(legacy_best, map_location="cpu", weights_only=False)
+        legacy_state = torch.load(legacy_best, map_location="cpu", weights_only=True)
         legacy_cfg = legacy_state.get("config", {})
         if legacy_cfg.get("layers") == 3 and legacy_cfg.get("hidden_size") == 512:
             torch.save(legacy_state, models / "best_model_3x512.pt")
@@ -178,7 +181,7 @@ def main() -> None:
         print("matplotlib unavailable; skipped loss plot")
     if args.layers == 4 and args.hidden_size == 768 and best_path.exists():
         # Keep the legacy default path usable while retaining explicit model files.
-        torch.save(torch.load(best_path, map_location="cpu", weights_only=False), legacy_best)
+        torch.save(torch.load(best_path, map_location="cpu", weights_only=True), legacy_best)
     print(f"Test files reserved: {len(test_files)}. Checkpoint: {best_path}")
     print(f"Run python -m ml.evaluate --data {processed} --models {models} --checkpoint {best_path}")
 

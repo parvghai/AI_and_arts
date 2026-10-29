@@ -1,0 +1,31 @@
+{
+  "data": "data\\processed",
+  "epochs": 30,
+  "batch_size": 16,
+  "sequence_length": 256,
+  "hidden_size": 768,
+  "embedding_size": 384,
+  "layers": 4,
+  "dropout": 0.3,
+  "learning_rate": 0.0003,
+  "weight_decay": 0.01,
+  "gradient_accumulation": 2,
+  "top_k": 20,
+  "top_p": 0.9,
+  "model_name": null,
+  "temperature": 0.8,
+  "seed": 42,
+  "output": ".",
+  "vocab_size": 128,
+  "duration_vocab": 16,
+  "velocity_vocab": 8,
+  "timing_vocab": 16,
+  "device": "cuda",
+  "loss_weights": {
+    "pitch": 1.0,
+    "duration": 1.0,
+    "velocity": 0.5,
+    "timing": 0.5
+  },
+  "target_conditioning": "future_window_final_pitch"
+}

@@ -36,6 +36,8 @@ def main() -> None:
     parser.add_argument("--target", choices=("C", "D", "E", "F", "G", "A", "B"), default="A")
     parser.add_argument("--bpm", type=int, default=100)
     args = parser.parse_args()
+    if args.output.exists():
+        raise SystemExit("Choose a new --output path; previous regression evidence is preserved.")
     report = {"seed": args.seed, "target": args.target, "bpm": args.bpm,
               "starting_composition": [event.__dict__ for event in fixture().events], "runs": []}
     for label, (filename, expected) in EXPECTED.items():
@@ -56,6 +58,7 @@ def main() -> None:
             generated = generator.generate_continuation(composition, args.target, seconds, args.bpm)
             latency = time.perf_counter() - started
             timeline = validate_timeline(generated, boundary, ("ai",))
+            within_budget = all(e.start + e.duration <= boundary + seconds + 1e-7 for e in generated)
             generated_payload = [event.__dict__.copy() for event in generated]
             interaction = composition.add_interaction(args.target, generated, seconds, args.bpm)
             appended_timeline = validate_timeline(interaction.events, monophonic_sources=("ai",))
@@ -66,6 +69,7 @@ def main() -> None:
                    "continuation_boundary": boundary,
                    "events": generated_payload,
                    "timeline_validation": timeline,
+                    "within_duration_budget": within_budget,
                    "interaction_after_append_validation": appended_timeline,
                    "absolute_composition_validation": global_timeline,
                    "inference_diagnostics": getattr(generator, "last_timeline_diagnostics", None)}
@@ -73,7 +77,7 @@ def main() -> None:
             print(f"REGRESSION {label} {seconds:.1f}s: events={len(generated)} "
                   f"valid={timeline['valid']} overlap={timeline['overlap_detected']} "
                   f"latency={latency:.3f}s")
-            if not timeline["valid"] or not appended_timeline["valid"] or not global_timeline["valid"]:
+            if not within_budget or not timeline["valid"] or not appended_timeline["valid"] or not global_timeline["valid"]:
                 raise SystemExit(f"Timeline regression failed for {label} {seconds:.1f}s: "
                                  f"{json.dumps({'generated': timeline, 'interaction': appended_timeline, 'composition': global_timeline})}")
     args.output.parent.mkdir(parents=True, exist_ok=True)

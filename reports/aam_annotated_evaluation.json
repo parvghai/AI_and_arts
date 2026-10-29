@@ -1,0 +1,46 @@
+{
+  "status": "completed",
+  "model": {
+    "name": "AAM annotation-aware LSTM",
+    "layers": 4,
+    "hidden_size": 768,
+    "embedding_size": 384,
+    "dropout": 0.3,
+    "sequence_length": 256,
+    "trainable_parameters": 17980185,
+    "selected_epoch": 12,
+    "validation_loss_at_selected_epoch": 0.6853980874115566
+  },
+  "test": {
+    "source_groups": 300,
+    "windows": 4130,
+    "target_events": 1057280,
+    "test_loss": 0.6829931464957267,
+    "pitch_loss": 0.5436815897719912,
+    "duration_loss": 0.13840700679844287,
+    "velocity_loss": 8.685541391084039e-09,
+    "timing_loss": 0.0018091007627402465,
+    "pitch_accuracy": 0.7946835275423729,
+    "duration_mae_seconds": 0.03633678891305918,
+    "velocity_mae": 0.0,
+    "timing_mae_seconds": 0.11066871562174388
+  },
+  "notes": [
+    "Train, validation, and test splits are source/composition-level, with 300 held-out test groups.",
+    "All dataset events used velocity token 3; velocity MAE 0.0 does not indicate learned velocity variation.",
+    "The annotation-aware timing MAE is higher than the recorded MIDI-only 4x768 result (0.066 seconds).",
+    "Metrics are symbolic prediction measurements and do not establish perceived musical quality.",
+    "Full training ran on CUDA; checkpoint files are intentionally excluded from this repository."
+  ],
+  "dataset": {
+    "name": "AAM MIDI + annotations v1.1.0",
+    "audio_used": false,
+    "valid_midi_files": 22574,
+    "total_events": 7552855,
+    "alignment_tolerance_seconds": 0.06,
+    "aligned_midi_files": 21867,
+    "unaligned_midi_files_unknown_context": 707,
+    "overlap_pairs_preserved": 16530269
+  },
+  "provenance": "Sanitized from experiments/aam_annotated/reports/evaluation_report.json. No local machine paths or checkpoint file paths are included."
+}

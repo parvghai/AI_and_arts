@@ -1,0 +1,64 @@
+# Python bytecode and local tooling
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local credentials and environment overrides
+.env
+.env.*
+!.env.example
+
+# User-provided AAM archives and derived MIDI data (do not redistribute)
+/data/raw/**
+!/data/raw/.gitkeep
+/data/processed/**
+!/data/processed/.gitkeep
+
+# Learned weights and checkpoints; obtain/train separately
+*.pt
+*.pth
+*.ckpt
+*.tmp.pt
+
+# Local training/session logs and evaluation output
+/runs/
+/logs/**
+!/logs/.gitkeep
+/test_outputs/**
+!/test_outputs/.gitkeep
+/evaluation/**
+!/evaluation/.gitkeep
+/experiments/aam_annotated/data/**
+/experiments/aam_annotated/models/**
+/experiments/aam_annotated/smoke/**
+/experiments/aam_annotated/logs/**
+/experiments/aam_annotated/generated/**
+/experiments/aam_annotated/dataset_manifest.json
+/experiments/aam_annotated/sample_encoded_sequences.json
+/reports/aam_dataset_manifest.json
+
+# Generated local diagnostics
+*.log
+/experiments/aam_annotated/dataset_manifest.json
+/experiments/aam_annotated/sample_encoded_sequences.json
+/experiments/aam_annotated/reports/training_summary.json
+/experiments/aam_annotated/reports/evaluation_report.json
+
+# Local cleanup inventories (session filenames and machine paths)
+/reports/cleanup_inventory.json
+/reports/workspace_cleanup_20261029.json
