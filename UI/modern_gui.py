@@ -1,6 +1,4 @@
-"""Modern dark "studio" skin for the AI Music Co-Creator.
-
-This module only replaces the *presentation* of ``gui.MusicApp``.  Every
+"""Modern dark "studio" skin for the AI Music Co-Creator.  Every
 behaviour — note-guided generation (LSTM or rule-based fallback), model
 selection, opt-in LoRA, playback, undo/clear, session autosave, interaction-log
 and MIDI export — is inherited unchanged from ``gui.MusicApp``.
