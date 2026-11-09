@@ -161,6 +161,4 @@ This project used the AAM MIDI and annotation files for its reported experiments
 - Ostermann, F., & Vatolkin, I. (2022). *AAM: Artificial Audio Multitracks Dataset* (v1.1.0). Zenodo. [https://doi.org/10.5281/zenodo.5794629](https://doi.org/10.5281/zenodo.5794629)
 - Ostermann, F., Vatolkin, I., & Ebeling, M. (2023). AAM: a dataset of Artificial Audio Multitracks for diverse music information retrieval tasks. *EURASIP Journal on Audio, Speech, and Music Processing*, 2023, 13. [https://doi.org/10.1186/s13636-023-00278-7](https://doi.org/10.1186/s13636-023-00278-7)
 
-## License and reuse
 
-No repository license file is included because the project code's ownership and licensing have not been verified. Without a `LICENSE` file, GitHub users do not receive an explicit open-source license to reuse this code. Confirm the code authorship and intended license, then add the chosen license before describing the repository as open source. The AAM dataset's terms are separate from this project's code license.
