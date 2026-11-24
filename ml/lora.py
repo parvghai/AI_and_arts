@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import math
+import pickle
 from pathlib import Path
 import torch
 from torch import nn
@@ -15,6 +16,21 @@ FORMAT = 'music-lstm-lora-v1'
 def sha256(path):
     with Path(path).open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def checkpoint_hashes(path):
+    """Compact checkpoints also identify their original training file."""
+    hashes = {sha256(path)}
+    try:
+        checkpoint = torch.load(path, map_location='cpu', weights_only=True)
+    except (OSError, RuntimeError, ValueError, EOFError, pickle.UnpicklingError):
+        return hashes
+    if not isinstance(checkpoint, dict):
+        return hashes
+    source = checkpoint.get('source_sha256')
+    if isinstance(source, str) and len(source) == 64 and all(c in '0123456789abcdef' for c in source):
+        hashes.add(source)
+    return hashes
 
 
 class LowRankWeight(nn.Module):
@@ -84,7 +100,7 @@ def read_adapter(path):
 def apply_adapter(model, path, base_checkpoint):
     """Validate on a temporary model, then merge deltas into the inference model."""
     payload = read_adapter(path)
-    if payload.get('base_sha256') != sha256(base_checkpoint):
+    if payload.get('base_sha256') not in checkpoint_hashes(base_checkpoint):
         raise ValueError('LoRA adapter does not match this base checkpoint (SHA-256)')
     if payload.get('targets') != target_names(model):
         raise ValueError('LoRA targets do not match this model')

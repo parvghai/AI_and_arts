@@ -9,6 +9,12 @@ DEFAULT_BPM = 100
 DEFAULT_CONTINUATION = 1.0
 
 
+def model_checkpoint(filename, app_dir=APP_DIR):
+    """Use distributed inference weights, with legacy local paths supported."""
+    compact = app_dir / 'models' / 'runtime' / filename
+    return compact if compact.exists() else app_dir / 'models' / filename
+
+
 def note_to_midi(name: str, octave: int = 4) -> int:
     """Convert a natural note name to MIDI pitch (C4 = 60)."""
     semitones = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}

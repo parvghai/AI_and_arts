@@ -10,7 +10,7 @@ from composition import (Composition, human_note_duration, sanitize_timeline,
                          validate_timeline)
 from config import DEFAULT_BPM, DEFAULT_CONTINUATION, LOG_DIR, NOTES
 from midi_player import MidiPlayer
-from config import APP_DIR
+from config import APP_DIR, model_checkpoint
 try:
     from ml.inference import LSTMGenerator
 except ImportError:  # PyTorch is an optional training/inference dependency.
@@ -42,7 +42,7 @@ class MusicApp:
         self.root.configure(bg=BG)
         self.composition = Composition()
         self.generator = RuleBasedGenerator()
-        self.ml_generator = LSTMGenerator(APP_DIR / "models" / "best_model_3x512.pt")
+        self.ml_generator = LSTMGenerator(model_checkpoint('best_model_3x512.pt', APP_DIR))
         self.temperature = tk.DoubleVar(value=0.75)
         self.model_choice = tk.StringVar(value="LSTM 3x512 (baseline)")
         if (self.ml_generator.config.get("layers") == 4 and
@@ -158,7 +158,7 @@ class MusicApp:
 
     def _selected_checkpoint(self):
         stem = LSTMGenerator.CHECKPOINTS[self.model_choice.get()]
-        return APP_DIR / 'models' / stem
+        return model_checkpoint(stem, APP_DIR)
 
     def _reload_selected_generator(self, adapter):
         self._set_busy(True)

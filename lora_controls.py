@@ -91,7 +91,7 @@ class LoRAControls:
         self.controls.append(self.box)
         row = tk.Frame(panel, bg='#11151d'); row.pack(fill='x', pady=8)
         for label, fn in [('Apply adapter', self.apply), ('Browse…', self.browse),
-                          ('Refresh', self.refresh), ('Training / evaluation help', self.help)]:
+                          ('Refresh', self.refresh), ('Adapter help', self.help)]:
             button = self.app._button(row, label, fn); button.pack(side='left', padx=3)
             self.controls.append(button)
         for variable, colour in [(self.details,'#edf2f7'),(self.message,'#55c2ff')]:
@@ -109,9 +109,9 @@ class LoRAControls:
                 f"Training epoch: {metadata.get('epoch', 'not recorded')}\n{training}")
 
     def _read_compatible(self, path):
-        from ml.lora import read_adapter, sha256
+        from ml.lora import read_adapter, checkpoint_hashes
         payload = read_adapter(path)
-        if payload.get('base_sha256') != sha256(self.app._selected_checkpoint()):
+        if payload.get('base_sha256') not in checkpoint_hashes(self.app._selected_checkpoint()):
             raise ValueError('Adapter is incompatible with the selected LSTM checkpoint')
         self._describe(payload, path)
         return payload
@@ -126,15 +126,15 @@ class LoRAControls:
         self.active_path = None; self.selection.set(''); self.details.set('')
         self.paths = {}; invalid = 0
         try:
-            from ml.lora import read_adapter, sha256
-            base_hash = sha256(self.app._selected_checkpoint())
+            from ml.lora import read_adapter, checkpoint_hashes
+            base_hashes = checkpoint_hashes(self.app._selected_checkpoint())
             files = sorted(self.adapter_root.rglob('adapter*.pt')) if self.adapter_root.exists() else []
             if self.hint and self.hint not in files:
                 files.insert(0, self.hint)
             for path in files:
                 try:
                     payload = read_adapter(path)
-                    if payload.get('base_sha256') != base_hash:
+                    if payload.get('base_sha256') not in base_hashes:
                         continue
                     self._describe(payload, path)
                     label = str(path.relative_to(self.adapter_root)) if path.is_relative_to(self.adapter_root) else str(path)
@@ -145,7 +145,7 @@ class LoRAControls:
                     invalid += 1
             self.box.configure(values=tuple(self.paths))
             msg = ('Select a compatible adapter and click Apply; generation is paused.' if self.paths else
-                   'No compatible adapters found for this model. Browse for an adapter or train one separately. LoRA has not been applied.')
+                   'No compatible adapters found. Browse for an adapter supplied for this model, or turn LoRA OFF.')
             if invalid:
                 msg += f' Skipped {invalid} missing/invalid file(s).'
             self.notify(msg)
@@ -211,15 +211,10 @@ class LoRAControls:
         self.app._refresh_model_label()
 
     def help(self):
-        base = self.app._selected_checkpoint()
-        adapter = self.paths.get(self.selection.get())
-        text = (f'Optional training (run separately from the project folder):\n\n'
-                f'python -B -m ml.train_lora --base "{base}" --output runs/lora/my_adapter\n\n'
-                'Choose a new output folder for each run. Base checkpoints are never overwritten. '
-                'Refresh this list after training. Training never starts automatically.\n\n'
-                'Evaluation uses the original base unless --adapter is explicitly supplied.\n')
-        if adapter:
-            text += (f'\npython -B -m ml.evaluate --data data/processed --checkpoint "{base}" '
-                     f'--adapter "{adapter}" --output runs/lora/my_evaluation\n')
-        text += '\nSee docs/LORA.md for details.'
-        messagebox.showinfo('Optional LoRA training / evaluation', text, parent=self.window)
+        text = ('LoRA is optional and starts OFF.\n\n'
+                'To use an adapter supplied for your selected model, choose Browse, '
+                'select its .pt file, and click Apply adapter.\n\n'
+                'Adapters must match the selected model. The compact models also '
+                'accept adapters made for their original training checkpoints.\n\n'
+                'Turn LoRA OFF to return to the base model.')
+        messagebox.showinfo('LoRA adapter help', text, parent=self.window)
