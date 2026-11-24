@@ -157,7 +157,7 @@ class LoRAGUITests(unittest.TestCase):
 
     def test_launch_argument_is_only_a_hint(self):
         import main
-        with patch('sys.argv',['main.py','--adapter','missing.pt']),patch('gui.MusicApp') as constructor:
+        with patch('sys.argv',['main.py','--adapter','missing.pt']),patch('vinyl_gui.VinylStudio') as constructor:
             main.main()
         constructor.assert_called_once_with(adapter_hint=Path('missing.pt'))
         constructor.return_value.run.assert_called_once()

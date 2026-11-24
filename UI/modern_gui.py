@@ -3,7 +3,7 @@ behaviour — note-guided generation (LSTM or rule-based fallback), model
 selection, opt-in LoRA, playback, undo/clear, session autosave, interaction-log
 and MIDI export — is inherited unchanged from ``gui.MusicApp``.
 
-Launch with ``python -B UI/modern_main.py`` (the original UI stays on ``main.py``).
+Launch with ``python -B main.py --modern`` or ``python -B UI/modern_main.py``.
 """
 from __future__ import annotations
 

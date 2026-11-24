@@ -1,8 +1,36 @@
 # AI Music Co-Creator
 
-## Current local version (29 October 2026)
+## Desktop interfaces
 
-The default app restores the original single-screen UI from [parvghai/AI_and_arts](https://github.com/parvghai/AI_and_arts/tree/79b7255daa09821fceca6d6b0f404a8ad77a6f5c): the same colors, controls, note buttons, timeline and immediate continuation playback. The extended reference/candidate/editor interface remains available with `--studio`.
+`python -B main.py` now opens the monochrome Tkinter vinyl studio. No new dependencies are needed.
+Choose an interface from the project root.
+
+| Command | Interface |
+| --- | --- |
+| `python -B main.py` | Monochrome Vinyl Studio with circular visualization and phrase history |
+| `python -B main.py --modern` | Purple modern studio with piano roll and phrase cards |
+| `python -B main.py --classic` | Original note-button interface |
+| `python -B main.py --studio` | Extended reference, candidate and editing tools |
+
+The modern studio also launches with `python -B UI/modern_main.py`. The earlier
+`UI/moder_main.py` filename remains supported. Interface flags are mutually exclusive.
+
+- Notes use the existing LSTM/LoRA pipeline; LoRA still starts OFF.
+- Vinyl markings and circular/timeline views map the actual composition events. Radius represents pitch,
+  arc length represents duration, and stroke width represents velocity. White is human; grey is AI.
+- The vinyl makes one visual revolution per 24 seconds of MIDI scheduler time. Pause preserves position.
+- Generation settings collapse and expand. Reduced motion disables vinyl rotation and ambient animation.
+  Both display preferences are saved locally.
+- The transport slider seeks and plays from the selected time. Stop resets the transport to zero.
+- Phrase cards replay their original events. Restore session reads existing interaction JSON logs;
+  subsequent edits autosave a new session, leaving the imported file unchanged.
+- Regenerate replaces the most recent phrase; failure restores its original events.
+
+See [implementation and validation](reports/vinyl_studio_report.md).
+
+## Previous classic version (29 October 2026)
+
+The classic app is available with `--classic` and restores the original single-screen UI from [parvghai/AI_and_arts](https://github.com/parvghai/AI_and_arts/tree/79b7255daa09821fceca6d6b0f404a8ad77a6f5c). It includes the original colors, controls, note buttons, timeline and immediate continuation playback. The extended reference/candidate/editor interface is available with `--studio`.
 
 ```powershell
 python -B main.py

@@ -17,6 +17,8 @@ class MidiPlayer:
         self._stop = threading.Event()
         self._pause = threading.Event()
         self._thread: threading.Thread | None = None
+        self._position = 0.0
+        self._playing = False
         self._midi = None
         self._handle = ctypes.c_void_p()
         self._open_windows_midi()
@@ -58,6 +60,15 @@ class MidiPlayer:
     def is_paused(self) -> bool:
         return self._pause.is_set()
 
+    @property
+    def position(self) -> float:
+        """Absolute composition time, published by the audio scheduler."""
+        return self._position
+
+    @property
+    def is_playing(self) -> bool:
+        return self._playing and not self.is_paused
+
     def play(self, events: list[NoteEvent]) -> None:
         previous = self._thread
         self.stop()
@@ -96,6 +107,11 @@ class MidiPlayer:
             schedule.append((on_time, 1, event))
             schedule.append((off_time, 0, event))
         schedule.sort(key=lambda row: (row[0], row[1]))
+        end_offset = max(t for t, _, _ in schedule)
+        if stop_event.is_set():
+            return
+        self._position = origin
+        self._playing = True
         clock = time.monotonic()
         active = {}
         if self._midi:
@@ -115,7 +131,9 @@ class MidiPlayer:
                             for held in active.values():
                                 self._send(held.pitch, held.velocity, True, held.channel)
                         continue
-                    remaining = due - (time.monotonic() - clock)
+                    elapsed = time.monotonic() - clock
+                    self._position = origin + min(elapsed, end_offset)
+                    remaining = due - elapsed
                     if remaining <= 0:
                         break
                     time.sleep(min(remaining, 0.02))
@@ -134,9 +152,11 @@ class MidiPlayer:
                     except RuntimeError:
                         pass
         finally:
-            if self._midi:
-                self._midi.midiOutReset(self._handle)
-            self.on_status("Ready")
+            if self._stop is stop_event:
+                self._playing = False
+                if self._midi:
+                    self._midi.midiOutReset(self._handle)
+                self.on_status("Ready")
 
     def pause(self) -> None:
         self._pause.set()
@@ -146,6 +166,8 @@ class MidiPlayer:
 
     def stop(self) -> None:
         self._stop.set()
+        self._pause.clear()
+        self._playing = False
         if self._midi:
             self._midi.midiOutReset(self._handle)
 
