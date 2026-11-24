@@ -87,7 +87,7 @@ def install_runtime():
                     run([sys.executable, '-m', 'venv', str(ENV_DIR)], log)
                     messages.put(('status', 'Downloading PyTorch and MIDI support...'))
                     run([str(ENV_PYTHON), '-m', 'pip', 'install', '--disable-pip-version-check',
-                         '--only-binary=:all:', '--index-url', 'https://pypi.org/simple',
+                         '--force-reinstall', '--only-binary=:all:', '--index-url', 'https://pypi.org/simple',
                          '--extra-index-url', 'https://download.pytorch.org/whl/cpu',
                          '-r', str(APP_DIR / 'requirements.txt')], log)
                     if not runtime_ready(ENV_PYTHON):
@@ -134,7 +134,7 @@ def ensure_runtime():
     if not runtime_ready(ENV_PYTHON) and not install_runtime():
         raise SystemExit(1)
     result = subprocess.run([str(ENV_PYTHON), str(APP_DIR / 'main.py'), *sys.argv[1:]],
-                            cwd=APP_DIR, creationflags=CREATE_FLAGS)
+                            creationflags=CREATE_FLAGS)
     if result.returncode:
         raise SystemExit(result.returncode)
     return False
