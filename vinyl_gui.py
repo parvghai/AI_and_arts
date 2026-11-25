@@ -11,6 +11,7 @@ from gui import MusicApp
 from config import LOG_DIR
 from zen_widgets import CollapsibleSettings, landscape, vinyl_angle, load_preferences, save_preferences
 from vinyl_view import event_marks, seek_events, restore_composition
+from display_config import DesignCanvas, StudioLayout
 
 BG='#11100F'; SURFACE='#191817'; SECOND='#211F1D'; ELEVATED='#2B2825'
 BORDER='#393531'; TEXT='#F0EAE0'; SUB='#AAA197'; MUTED='#77716B'
@@ -35,7 +36,14 @@ class VinylStudio(MusicApp):
         self._ambient_started=time.monotonic(); self._ambient_phase=0.; self._ambient_counter=0
         super().__init__(adapter_hint)
         self.root.title('VINYL / Human × AI music studio')
-        self.root.geometry('1440x920'); self.root.minsize(1100,760)
+        # Preserve the original 150% presentation, independent of Windows zoom.
+        width = min(2160, self.root.winfo_screenwidth() - 40)
+        height = min(1380, self.root.winfo_screenheight() - 100)
+        self.root.geometry(f'{width}x{height}')
+        self.root.minsize(min(900, width), min(600, height))
+        self.layout = StudioLayout(self.root, self._refresh, self.generation_settings.viewport)
+        self.root.update_idletasks()
+        self.layout.fit()
         self._refresh(); self._tick()
 
     @staticmethod
@@ -93,7 +101,7 @@ class VinylStudio(MusicApp):
         tk.Checkbutton(sidebar,text='Reduced motion',variable=self.reduced_motion,
             command=self._motion_changed,bg=SURFACE,fg=SUB,selectcolor=SECOND,
             activebackground=SURFACE,activeforeground=TEXT,font=(FONT,8),bd=0).pack(anchor='w',pady=10)
-        self.sidebar_landscape=tk.Canvas(sidebar,bg=SURFACE,highlightthickness=0,height=150)
+        self.sidebar_landscape=DesignCanvas(sidebar,bg=SURFACE,highlightthickness=0,height=150)
         self.sidebar_landscape.pack(side='bottom',fill='x',pady=(12,10))
         self.sidebar_landscape.bind('<Configure>',lambda e:self._paint_landscapes())
         create=tk.Frame(body,bg=SURFACE,width=265,padx=18,pady=24,
@@ -140,7 +148,7 @@ class VinylStudio(MusicApp):
         label(top,'STEREO  /  静',9,SUB).pack(side='right')
         label(work,'Untitled co-creation',24,TEXT).pack(anchor='w',pady=(10,4))
         self.info=label(work,'',9); self.info.pack(anchor='w')
-        self.visual=tk.Canvas(work,bg=BG,highlightthickness=0,height=180)
+        self.visual=DesignCanvas(work,bg=BG,highlightthickness=0,height=180)
         self.visual.pack(fill='both',expand=True,pady=(8,0)); self.record=self.visual
         self.visual.bind('<Configure>',lambda e:self._draw_timeline())
         self.visual.bind('<Button-1>',self._visual_click)
@@ -155,12 +163,12 @@ class VinylStudio(MusicApp):
                         ('Regenerate',self._regenerate),('Undo',self._undo),('Clear',self._clear),('Export MIDI',self._export_midi)]:
             self.action(toolbar,name,fn,side='left',padx=(0,4))
         label(work,'03 / PHRASE HISTORY — select to replay',9,MUTED).pack(anchor='w',pady=(5,8))
-        self.history=tk.Canvas(work,bg=BG,height=84,highlightthickness=0)
+        self.history=DesignCanvas(work,bg=BG,height=84,highlightthickness=0)
         self.history.pack(fill='x')
         self.history.bind('<Button-1>',self._replay_click)
         scroll=ttk.Scrollbar(work,orient='horizontal',command=self.history.xview)
         scroll.pack(fill='x'); self.history.configure(xscrollcommand=scroll.set)
-        self.bottom_landscape=tk.Canvas(work,bg=BG,height=64,highlightthickness=0)
+        self.bottom_landscape=DesignCanvas(work,bg=BG,height=64,highlightthickness=0)
         self.bottom_landscape.pack(fill='x',pady=(5,0))
         self.bottom_landscape.bind('<Configure>',lambda e:self._paint_landscapes())
         self.sequence=label(work,'',8,wraplength=800,anchor='w')
@@ -311,7 +319,8 @@ class VinylStudio(MusicApp):
             self.player.play(self.composition.interactions[index].events)
 
     def _visual_click(self,event):
-        if self._center and math.hypot(event.x-self._center[0],event.y-self._center[1])<=self._center[2]:
+        scale=self.visual.design_scale
+        if self._center and math.hypot(event.x/scale-self._center[0],event.y/scale-self._center[1])<=self._center[2]:
             self._toggle_play()
 
     def _toggle_play(self):

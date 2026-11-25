@@ -9,11 +9,15 @@
 !/composition.py
 !/config.py
 !/gui.py
+!/display_config.py
 !/lora_controls.py
 !/midi_player.py
 !/vinyl_gui.py
 !/vinyl_view.py
 !/zen_widgets.py
+!/tests/
+/tests/*
+!/tests/test_display_config.py
 !/ml/
 /ml/*
 !/ml/__init__.py

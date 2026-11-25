@@ -35,7 +35,10 @@ NOTE_KEYS["h"] = "B"
 
 class MusicApp:
     def __init__(self, adapter_hint=None) -> None:
+        from display_config import configure_windows_dpi, configure_studio_display
+        configure_windows_dpi()
         self.root = tk.Tk()
+        configure_studio_display(self.root)
         self.root.title("AI Music Co-Creator • Music Studio")
         self.root.geometry("980x720")
         self.root.minsize(820, 620)
