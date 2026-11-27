@@ -31,3 +31,5 @@
 /models/runtime/*
 !/models/runtime/best_model_3x512.pt
 !/models/runtime/best_model_4x768.pt
+
+!/vinyl-studio-ui.png
