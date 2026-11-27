@@ -2,7 +2,7 @@
 
 A desktop app for human-AI music co-creation. Choose a note and hear a trained LSTM generate a short continuation. Replay, regenerate and export your composition as MIDI.
 
-![Vinyl Studio desktop interface with musical cue controls, vinyl-inspired composition view, and playback controls](vinyl-studio-ui.png)
+![Vinyl Studio desktop interface with musical cue controls, vinyl-inspired composition view, and playback controls](UI.png)
 
 ## Run
 
